@@ -9,3 +9,9 @@ def hash_pwd(pwd: str) -> str:
     hash = bcrypt.hashpw(bytes, salt)
     
     return hash
+
+def verify_pwd(given_pwd: str, hash: str) -> bool:
+    """Checks if the given password is correct.
+    """
+    
+    return bcrypt.checkpw(given_pwd, hash)
