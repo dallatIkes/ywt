@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.models import UserBody
 from app.db_connection import get_db
 from app.database import User
-from app.utils.hash import hash_pwd
+from app.utils.security import hash_pwd
 from app.utils.check_db import get_user_or_404
 
 users_crud_router = APIRouter()
