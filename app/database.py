@@ -1,5 +1,4 @@
 import datetime
-import uuid
 from sqlalchemy import String, func, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
@@ -9,11 +8,8 @@ class Base(DeclarativeBase):
 class User(Base):
     __tablename__ = "users"
     
-    id: Mapped[str] = mapped_column(
-        primary_key=True,
-        default=lambda: str(uuid.uuid4())
-    )
-    username: Mapped[str] = mapped_column(String(20), nullable=False)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(String(20), nullable=False, unique=True, index=True)
     hashed_password: Mapped[str] = mapped_column(String(50), nullable=False)
 
     sent_recommendations: Mapped[list["Recommendation"]] = relationship(
@@ -33,11 +29,11 @@ class Recommendation(Base):
     
     id: Mapped[int] = mapped_column(primary_key=True)
     link: Mapped[str] = mapped_column(nullable=False)
-    from_user_id: Mapped[str] = mapped_column(
+    from_user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"),
         nullable=False
     )
-    to_user_id: Mapped[str] = mapped_column(
+    to_user_id: Mapped[int] = mapped_column(
         ForeignKey("users.id"),
         nullable=False
     )

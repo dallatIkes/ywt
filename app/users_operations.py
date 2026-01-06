@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from app.models import UserBody
 from app.db_connection import get_db
 from app.database import User
-from app.utils.security import hash_pwd
+from app.utils.security.pwd import hash_pwd
 from app.utils.check_db import get_user_or_404
 
 users_crud_router = APIRouter()
@@ -22,7 +23,14 @@ def add_new_user(
     )
     
     db.add(new_user)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Username already exists"
+        )
     db.refresh(new_user)
     
     return new_user
@@ -38,28 +46,35 @@ def get_users(
 
 @users_crud_router.get("/user")
 def get_user(
-    user_id: str, db: Session = Depends(get_db)
+    username: str, db: Session = Depends(get_db)
 ):
     """Reading a specific user.
     """
     
-    return get_user_or_404(user_id, db)
+    return get_user_or_404(username, db)
 
 @users_crud_router.post("/user/{user_id}")
 def update_user(
-    user_id: str,
+    username: str,
     user: UserBody,
     db: Session = Depends(get_db),
 ):
     """Updating a user.
     """
     
-    db_user = get_user_or_404(user_id, db)
+    db_user = get_user_or_404(username, db)
         
     db_user.username = user.username
     db_user.hashed_password = hash_pwd(user.password)
     
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Username already exists"
+        )
     db.refresh(db_user)
     
     return db_user
@@ -67,12 +82,12 @@ def update_user(
 
 @users_crud_router.delete("/user")
 def delete_user(
-    user_id: str, db: Session = Depends(get_db)
+    username: str, db: Session = Depends(get_db)
 ):
     """Deleting a user.
     """
     
-    db_user = get_user_or_404(user_id, db)
+    db_user = get_user_or_404(username, db)
         
     db.delete(db_user)
     db.commit()

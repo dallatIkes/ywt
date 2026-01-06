@@ -5,7 +5,7 @@ import datetime
 from app.models import RecoBody
 from app.db_connection import get_db
 from app.database import Recommendation
-from app.utils.check_db import get_user_or_404, get_reco_or_404
+from app.utils.check_db import get_user_with_id_or_404, get_reco_or_404
 
 recos_crud_router = APIRouter()
 
@@ -16,8 +16,8 @@ def add_new_reco(
     """Creating a new recommendation.
     """
     
-    from_user = get_user_or_404(reco.from_user_id, db)
-    to_user = get_user_or_404(reco.to_user_id, db)
+    from_user = get_user_with_id_or_404(reco.from_user_id, db)
+    to_user = get_user_with_id_or_404(reco.to_user_id, db)
     
     new_reco = Recommendation(
         link=reco.link, 
@@ -61,8 +61,8 @@ def update_reco(
     
     db_reco = get_reco_or_404(reco_id, db)
     
-    from_user = get_user_or_404(reco.from_user_id, db)
-    to_user = get_user_or_404(reco.to_user_id, db)
+    from_user = get_user_with_id_or_404(reco.from_user_id, db)
+    to_user = get_user_with_id_or_404(reco.to_user_id, db)
         
     db_reco.link = reco.link
     db_reco.from_user_id = from_user.id
