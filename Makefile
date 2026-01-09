@@ -1,15 +1,14 @@
 # ============================================
 # Development Makefile
 # ============================================
-
 VENV_PYTHON=.venv/bin/python
-BACKEND_CMD=$(VENV_PYTHON) run_server.py
+BACKEND_CMD=.venv/bin/uvicorn main:app --reload --host 0.0.0.0 --port 8000
 FRONTEND_DIR=frontend
 FRONTEND_CMD=npm run dev
 
 .DEFAULT_GOAL := help
 
-.PHONY: help venv back front dev freeze
+.PHONY: help venv back front dev freeze db-clean db-seed
 
 help:
 	@echo ""
@@ -22,6 +21,8 @@ help:
 	@echo "make front    → Start SvelteKit frontend"
 	@echo "make dev      → Start backend and frontend together"
 	@echo "make freeze   → Update requirements.txt from venv"
+	@echo "make db-clean → Clean database"
+	@echo "make db-seed  → Seeding database with test data"
 	@echo ""
 	@echo "👉 Example:"
 	@echo "   make dev"
@@ -58,6 +59,9 @@ front:
 	@echo ""
 	cd $(FRONTEND_DIR) && $(FRONTEND_CMD)
 
+# -----------------------
+# DEVELOPMENT (backend + frontend)
+# -----------------------
 dev: venv
 	@echo "============================================"
 	@echo "🔥 Launching development environment"
@@ -67,8 +71,15 @@ dev: venv
 	@echo "👉 Press Ctrl+C to stop everything"
 	@echo "============================================"
 	@echo ""
-	$(BACKEND_CMD) & \
-	cd $(FRONTEND_DIR) && $(FRONTEND_CMD)
+	@bash -c '\
+		set -m; \
+		$(BACKEND_CMD) & \
+		BACK_PID=$$!; \
+		cd $(FRONTEND_DIR) && $(FRONTEND_CMD) & \
+		FRONT_PID=$$!; \
+		trap "echo \"Stopping dev environment...\"; kill -TERM $$BACK_PID $$FRONT_PID 2>/dev/null; exit 0" INT TERM; \
+		wait \
+	'
 
 freeze: venv
 	@echo "============================================"
@@ -79,3 +90,22 @@ freeze: venv
 	$(VENV_PYTHON) -m pip freeze > requirements.txt
 	@echo "✅ requirements.txt updated"
 	@echo ""
+
+db-clean:
+	@echo "============================================"
+	@echo "🧹 Cleaning database"
+	@echo "--------------------------------------------"
+	@if [ -f "test.db" ]; then \
+		rm test.db && echo "✅ test.db removed"; \
+	else \
+		echo "ℹ️ test.db not found"; \
+	fi
+	@echo ""
+
+db-seed: venv
+	@echo "============================================"
+	@echo "🌱 Seeding database with test data"
+	@echo "--------------------------------------------"
+	@echo ""
+	$(VENV_PYTHON) -m scripts.seed_db
+	@echo "✅ Database seeded"

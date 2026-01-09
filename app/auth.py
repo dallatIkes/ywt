@@ -6,7 +6,15 @@ from app.db_connection import get_db
 from app.models import Token
 from app.utils.security.pwd import authenticate_user
 from app.utils.security.token import create_access_token, decode_access_token
-from app.database import Recommendation
+
+def get_current_user(
+    token: str = Depends(OAuth2PasswordBearer(tokenUrl="/token")), 
+    session: Session = Depends(get_db)
+):
+    user = decode_access_token(token, session)
+    if not user:
+        raise HTTPException(status_code=401, detail="User not authorized")
+    return user
 
 auth_router = APIRouter()
 
@@ -29,19 +37,9 @@ def read_user_me(
     token: str = Depends(OAuth2PasswordBearer(tokenUrl="/token")), 
     session: Session = Depends(get_db)
 ):
-    user = decode_access_token(token, session)
-    if not user:
-        raise HTTPException(status_code=401, detail="User not authorized")
-    recommended_to_me = session.query(Recommendation).filter(
-        Recommendation.to_user_id == user.id
-    ).all()
-
-    recommended_by_me = session.query(Recommendation).filter(
-        Recommendation.from_user_id == user.id
-    ).all()
+    user = get_current_user(token, session)
 
     return {
         "username": user.username,
-        "recommended_to_me": recommended_to_me,
-        "recommended_by_me": recommended_by_me
+        # TODO: add here the user info we want to display on the front
     }
