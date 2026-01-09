@@ -47,7 +47,10 @@
     {:else}
         <ul>
             {#each recommendations as r}
-                <li><iframe title="" width="420" height="315" src={r.link}></iframe></li> 
+                <li>
+                    <p>Recommended to you by {r.from_user_id}</p>
+                    <iframe title="" width="420" height="315" src={r.link}></iframe>
+                </li> 
             {/each}
         </ul>
     {/if}
