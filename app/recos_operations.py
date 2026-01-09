@@ -34,58 +34,22 @@ def add_new_reco(
     
     return new_reco
 
-@recos_crud_router.get("/recos")
+@recos_crud_router.get("/recommendations/sent")
 def get_recos(
-    db: Session = Depends(get_db)
-):
-    """Reading all the recommendations.
-    """
-    
-    return db.query(Recommendation).all()
-
-@recos_crud_router.get("/reco")
-def get_reco(
-    reco_id: int, db: Session = Depends(get_db)
-):
-    """Reading a specific recommendations.
-    """
-    
-    return get_reco_or_404(reco_id, db)
-
-@recos_crud_router.post("/reco/{reco_id}")
-def update_reco(
-    reco_id: int,
-    reco: RecoBody,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    """Updating a recommenndation.
+    """Reading all the recommendations sent.
     """
     
-    db_reco = get_reco_or_404(reco_id, db)
-    
-    from_user = get_user_with_id_or_404(reco.from_user_id, db)
-    to_user = get_user_with_id_or_404(reco.to_user_id, db)
-        
-    db_reco.link = reco.link
-    db_reco.from_user_id = from_user.id
-    db_reco.to_user_id = to_user.id
-    
-    db.commit()
-    db.refresh(db_reco)
-    
-    return db_reco
+    return db.query(Recommendation).filter(Recommendation.from_user == current_user).all()
 
-
-@recos_crud_router.delete("/reco")
-def delete_reco(
-    reco_id: int, db: Session = Depends(get_db)
+@recos_crud_router.get("/recommendations/received")
+def get_recos(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
 ):
-    """Deleting a recommendation.
+    """Reading all the recommendations received.
     """
     
-    db_reco = get_reco_or_404(reco_id, db)
-        
-    db.delete(db_reco)
-    db.commit()
-    
-    return {"detail": "Recommendation deleted"}
+    return db.query(Recommendation).filter(Recommendation.to_user == current_user).all()
