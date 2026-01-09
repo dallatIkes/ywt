@@ -36,21 +36,47 @@ def add_new_reco(
     return new_reco
 
 @recos_crud_router.get("/recommendations/sent")
-def get_recos(
+def get_sent_recos(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Reading all the recommendations sent.
     """
     
-    return db.query(Recommendation).filter(Recommendation.from_user == current_user).all()
+    recos = (
+        db.query(Recommendation, User.username)
+        .join(User, Recommendation.to_user_id == User.id)
+        .filter(Recommendation.from_user_id == current_user.id)
+        .all()
+    )
+    
+    return [
+        {
+            "link": r.Recommendation.link,
+            "to_user": r.username
+        }
+        for r in recos
+    ]
 
 @recos_crud_router.get("/recommendations/received")
-def get_recos(
+def get_reeceived_recos(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Reading all the recommendations received.
     """
     
-    return db.query(Recommendation).filter(Recommendation.to_user == current_user).all()
+    recos = (
+        db.query(Recommendation, User.username)
+        .join(User, Recommendation.from_user_id == User.id)
+        .filter(Recommendation.to_user_id == current_user.id)
+        .all()
+    )
+    
+    return [
+        {
+            "link": r.Recommendation.link,
+            "from_user": r.username
+        }
+        for r in recos
+    ]

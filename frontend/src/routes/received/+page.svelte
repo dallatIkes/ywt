@@ -48,7 +48,7 @@
         <ul>
             {#each recommendations as r}
                 <li>
-                    <p>Recommended to you by {r.from_user_id}</p>
+                    <p>Recommended to you by {r.from_user}</p>
                     <iframe title="" width="420" height="315" src={r.link}></iframe>
                 </li> 
             {/each}
