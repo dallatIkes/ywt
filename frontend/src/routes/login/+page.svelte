@@ -8,7 +8,7 @@
     async function login() {
         error = '';
 
-        // Appel à ton endpoint /token
+        // Calling the /token endpoint
         const res = await fetch('http://localhost:8000/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -23,10 +23,10 @@
         const data = await res.json();
         const token = data.access_token;
 
-        // Stocker le token pour les fetch suivants
+        // Store the token for the upcomming fetches
         localStorage.setItem('access_token', token);
 
-        // Redirection après login
+        // Redirectionn after login
         goto('/received');
     }
 </script>

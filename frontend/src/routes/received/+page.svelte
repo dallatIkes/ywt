@@ -3,13 +3,13 @@
     import { goto } from '$app/navigation';
 
     let recommendations = [];
-    let loading = true; // on ne rend rien tant que ce n’est pas vérifié
+    let loading = true;
 
     onMount(async () => {
         const token = localStorage.getItem('access_token');
 
         if (!token) {
-            goto('/login'); // redirection immédiate
+            goto('/login');
             return;
         }
 
@@ -22,23 +22,23 @@
 
             if (!res.ok) {
                 console.error("Failed to fetch:", res.status);
-                goto('/login'); // si le token est invalide
+                goto('/login');
                 return;
             }
 
             recommendations = await res.json();
         } catch (err) {
             console.error(err);
-            goto('/login'); // en cas d’erreur réseau
+            goto('/login');
             return;
         } finally {
-            loading = false; // fin du chargement
+            loading = false; 
         }
     });
 </script>
 
 {#if loading}
-    <p>Loading…</p> <!-- ou rien du tout -->
+    <p>Loading…</p>
 {:else}
     <h1>Recommended to me</h1>
 
