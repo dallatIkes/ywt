@@ -52,117 +52,6 @@
 
 
 <style>
-    :global(body) {
-        margin: 0;
-        font-family: 'Arial', sans-serif;
-        background: #f0f2f5;
-    }
-
-    /* ======= */
-    /* Navbar  */
-    /* ======= */
-    .navbar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background-color: #0077cc;
-        padding: 0.5rem 1rem;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-        z-index: 1000;
-        box-sizing: border-box;
-    }
-
-    .navbar ul {
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 0.5rem;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .navbar li {
-        flex: none;
-    }
-
-    .navbar li.brand-item {
-        margin-right: 0.5rem;
-    }
-
-    .navbar li.right-section {
-        margin-left: auto;
-    }
-
-    .navbar .right-content {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .navbar .user-id {
-        color: white;
-        font-size: 1rem;
-        font-weight: 600;
-        font-family: 'Arial', sans-serif;
-        white-space: nowrap;
-        min-width: 280px;
-    }
-
-    .navbar button.copy-btn {
-        padding: 0.5rem 1.2rem;
-        font-size: 1rem;
-        font-weight: 600;
-        min-width: 60px;
-        width: 60px;
-    }
-
-    .navbar button.copy-btn:hover {
-        transform: scale(1.05);
-    }
-
-    .navbar .brand {
-        font-size: 1.3rem;
-        font-weight: 700;
-        color: white;
-        margin: 0;
-    }
-
-    .navbar button {
-        display: block;
-        width: 100%;
-        background-color: #0077cc;
-        color: white;
-        border: 2px solid white;
-        border-radius: 6px;
-        padding: 0.5rem 1.2rem;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        text-align: center;
-        transition: all 0.2s ease;
-    }
-
-    .navbar button:hover {
-        background-color: white;
-        color: #0077cc;
-        border-color: #0077cc;
-    }
-
-    .navbar button.logout-btn {
-        background-color: #dc3545;
-        border-color: white;
-    }
-
-    .navbar button.logout-btn:hover {
-        background-color: white;
-        color: #dc3545;
-        border-color: #dc3545;
-    }
-
     /* ============== */
     /* Page container */
     /* ============== */
@@ -231,20 +120,6 @@
     /* Responsive */
     /* ========== */
     @media (max-width: 600px) {
-        .navbar ul {
-            flex-direction: column;
-            gap: 0.5rem;
-            align-items: stretch;
-        }
-
-        .navbar li.brand-item {
-            text-align: center;
-        }
-
-        .navbar button {
-            width: 100%;
-        }
-
         ul.reco-list {
             gap: 1rem;
         }
