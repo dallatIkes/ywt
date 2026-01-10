@@ -4,63 +4,97 @@
     let link = '';
     let user_id = '';
     let error = '';
+    let success = false;
     
     async function new_reco() {
+        error = '';
+        success = false;
         const token = localStorage.getItem('access_token');
-
+        
         if (!token) {
             goto('/login');
             return;
         }
-
-        const res = await fetch('http://localhost:8000/recommendations/send', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                link: link,
-                to_user_id: user_id
-            })
-        });
-    };
+        
+        try {
+            const res = await fetch('http://localhost:8000/recommendations/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    link: link,
+                    to_user_id: user_id
+                })
+            });
+            
+            if (!res.ok) {
+                // Check if it's an authentication error
+                if (res.status === 401) {
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('current_user');
+                    goto('/login');
+                    return;
+                }
+                
+                const errorData = await res.json();
+                error = errorData.detail || 'Failed to create recommendation';
+                return;
+            }
+            
+            // Success
+            success = true;
+        } catch (err) {
+            error = err.message || 'An error occurred';
+            console.error('Failed to create the recommendation:', err);
+        } finally {
+            // Reset form
+            link = '';
+            user_id = '';
+        }
+    }
 </script>
 
-<form on:submit|preventDefault={new_reco}>
-    <h1>Recommend a video to your friends</h1>
-    <label>
-        Video link:
-        <input bind:value={link} placeholder="https://youtu.be/dQw4w9WgXcQ"/>
-    </label>
-    <label>
-        Your friend's ID:
-        <input bind:value={user_id} placeholder="1"/>
-    </label>
-    <button type="submit">Recommend</button>
-    {#if error}
-        <p style="color:red">{error}</p>
-    {/if}
-</form>
+<div class="page-container">
+    <form on:submit|preventDefault={new_reco}>
+        <h1>Recommend a video to your friends</h1>
+        <label>
+            Video link:
+            <input bind:value={link} placeholder="https://youtu.be/dQw4w9WgXcQ" required/>
+        </label>
+        <label>
+            Your friend's ID:
+            <input bind:value={user_id} placeholder="1" required/>
+        </label>
+        <button type="submit">Recommend</button>
+        {#if error}
+            <p class="error">{error}</p>
+        {:else if success}
+            <p class="success">Recommendation sent!</p>
+        {/if}
+    </form>
+</div>
 
 <style>
-    /* Container */
-    :global(body) {
-        margin: 0;
-        font-family: 'Arial', sans-serif;
-        background: #f0f2f5;
+    /* ============== */
+    /* Page container */
+    /* ============== */
+    .page-container {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
-        min-height: 100vh;
+        justify-content: center;
+        padding: 6rem 1rem 2rem; 
+        min-height: calc(100vh - 6rem);
     }
-    
+
     h1 {
         text-align: center;
         margin-bottom: 2rem;
         color: #333;
     }
-    
+
     form {
         background: #fff;
         padding: 2rem;
@@ -72,7 +106,7 @@
         max-width: 650px;
         box-sizing: border-box;
     }
-    
+
     label {
         display: flex;
         flex-direction: column;
@@ -80,7 +114,7 @@
         font-weight: 500;
         color: #555;
     }
-    
+
     input {
         padding: 0.6rem 0.8rem;
         margin-top: 0.4rem;
@@ -89,12 +123,12 @@
         font-size: 1rem;
         transition: border-color 0.2s;
     }
-    
+
     input:focus {
         outline: none;
         border-color: #0077cc;
     }
-    
+
     button {
         padding: 0.8rem;
         background-color: #0077cc;
@@ -106,18 +140,25 @@
         cursor: pointer;
         transition: background-color 0.2s;
     }
-    
+
     button:hover {
         background-color: #0056b3;
     }
-    
-    p {
+
+    p.error {
         margin-top: 1rem;
         text-align: center;
-        color: red;
+        color: #dc3545;
         font-weight: bold;
     }
-    
+
+    p.success {
+        margin-top: 1rem;
+        text-align: center;
+        color: #28a745;
+        font-weight: bold;
+    }
+
     /* Responsive */
     @media (max-width: 600px) {
         form {
