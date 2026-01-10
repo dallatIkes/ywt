@@ -31,12 +31,12 @@
     }
 </script>
 
-<h1>Login</h1>
 
 <form on:submit|preventDefault={login}>
+    <h1>Login</h1>
     <label>
         Username:
-        <input bind:value={username} />
+        <input bind:value={username} placeholder="johnDoe"/>
     </label>
 
     <label>
@@ -45,8 +45,94 @@
     </label>
 
     <button type="submit">Login</button>
+    {#if error}
+        <p style="color:red">{error}</p>
+    {/if}
 </form>
 
-{#if error}
-    <p style="color:red">{error}</p>
-{/if}
+
+<style>
+    /* Container centré */
+    :global(body) {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f0f2f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    form {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 400px;
+        box-sizing: border-box;
+    }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 1rem;
+        font-weight: 500;
+        color: #555;
+    }
+
+    input {
+        padding: 0.6rem 0.8rem;
+        margin-top: 0.4rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: border-color 0.2s;
+    }
+
+    input:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+    button {
+        padding: 0.8rem;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    p {
+        margin-top: 1rem;
+        text-align: center;
+        color: red;
+        font-weight: bold;
+    }
+
+    /* Responsive mobile */
+    @media (max-width: 480px) {
+        form {
+            padding: 1.5rem;
+            width: 90%;
+        }
+    }
+</style>
+
+
