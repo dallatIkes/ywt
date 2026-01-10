@@ -11,7 +11,7 @@ from app.utils.url import normalize_youtube_link
 
 recos_crud_router = APIRouter()
 
-@recos_crud_router.post("/reco")
+@recos_crud_router.post("/recommendations/send")
 def add_new_reco(
     reco: RecoBody, 
     db: Session = Depends(get_db),
