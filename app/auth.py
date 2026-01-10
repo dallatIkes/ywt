@@ -40,6 +40,6 @@ def read_user_me(
     user = get_current_user(token, session)
 
     return {
+        "id": user.id,
         "username": user.username,
-        # TODO: add here the user info we want to display on the front
     }
