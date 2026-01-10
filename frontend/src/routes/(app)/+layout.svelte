@@ -66,6 +66,7 @@
         <li class="brand-item"><span class="brand">Yo Watch This!</span></li>
         <li><button on:click={() => goto('/received')}>Received</button></li>
         <li><button on:click={() => goto('/sent')}>Sent</button></li>
+        <li><button on:click={() => goto('/recommend')}>Recommend</button></li>
         <li class="right-section">
             <div class="right-content">
                 {#if currentUser}

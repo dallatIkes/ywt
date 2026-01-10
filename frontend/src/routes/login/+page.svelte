@@ -64,7 +64,7 @@
 </form>
 
 <style>
-    /* Container centré */
+    /* Container */
     :global(body) {
         margin: 0;
         font-family: Arial, sans-serif;
@@ -138,7 +138,7 @@
         font-weight: bold;
     }
 
-    /* Responsive mobile */
+    /* Responsive */
     @media (max-width: 480px) {
         form {
             padding: 1.5rem;
