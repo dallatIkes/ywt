@@ -1,36 +1,51 @@
 <script>
     import { goto } from '$app/navigation';
-
+    
     let username = '';
     let password = '';
     let error = '';
-
+    
     async function login() {
         error = '';
-
+        
         // Calling the /token endpoint
         const res = await fetch('http://localhost:8000/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ username, password })
         });
-
+        
         if (!res.ok) {
             error = 'Invalid username or password';
             return;
         }
-
+        
         const data = await res.json();
         const token = data.access_token;
-
-        // Store the token for the upcomming fetches
+        
+        // Store the token for the upcoming fetches
         localStorage.setItem('access_token', token);
-
-        // Redirectionn after login
+        
+        // Fetch and store current user info
+        try {
+            const userRes = await fetch('http://localhost:8000/users/me', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (userRes.ok) {
+                const userData = await userRes.json();
+                localStorage.setItem('current_user', JSON.stringify(userData));
+            }
+        } catch (err) {
+            console.error('Failed to fetch user data:', err);
+        }
+        
+        // Redirection after login
         goto('/received');
     }
 </script>
-
 
 <form on:submit|preventDefault={login}>
     <h1>Login</h1>
@@ -38,18 +53,15 @@
         Username:
         <input bind:value={username} placeholder="johnDoe"/>
     </label>
-
     <label>
         Password:
         <input type="password" bind:value={password} />
     </label>
-
     <button type="submit">Login</button>
     {#if error}
         <p style="color:red">{error}</p>
     {/if}
 </form>
-
 
 <style>
     /* Container centré */
@@ -134,5 +146,3 @@
         }
     }
 </style>
-
-
