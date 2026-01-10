@@ -4,8 +4,6 @@
 
     let recommendations = [];
     let loading = true;
-    let currentUser = null;
-    let copySuccess = false;
 
     onMount(async () => {
         const token = localStorage.getItem('access_token');
@@ -15,92 +13,25 @@
             return;
         }
 
-        // Check if user data is cached
-        const cachedUser = localStorage.getItem('current_user');
-        if (cachedUser) {
-            currentUser = JSON.parse(cachedUser);
-        }
-
-        try {
-            // Fetch current user only if not cached
-            if (!cachedUser) {
-                const userRes = await fetch('http://localhost:8000/users/me', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (userRes.ok) {
-                    currentUser = await userRes.json();
-                    localStorage.setItem('current_user', JSON.stringify(currentUser));
-                }
+        const res = await fetch('http://localhost:8000/recommendations/sent', {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
+        });
 
-            // Fetch recommendations
-            const res = await fetch('http://localhost:8000/recommendations/received', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!res.ok) {
-                console.error("Failed to fetch:", res.status);
-                goto('/login');
-                return;
-            }
-
-            recommendations = await res.json();
-        } catch (err) {
-            console.error(err);
+        if (!res.ok) {
             goto('/login');
             return;
-        } finally {
-            loading = false; 
         }
+
+        recommendations = await res.json();
+        loading = false;
     });
-
-    function handleLogout() {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('current_user');
-        goto('/login');
-    }
-
-    async function copyUserId() {
-        if (currentUser && currentUser.id) {
-            try {
-                await navigator.clipboard.writeText(currentUser.id);
-                copySuccess = true;
-                setTimeout(() => {
-                    copySuccess = false;
-                }, 2000);
-            } catch (err) {
-                console.error('Failed to copy:', err);
-            }
-        }
-    }
 </script>
 
-<nav class="navbar">
-    <ul>
-        <li class="brand-item"><span class="brand">Yo Watch This!</span></li>
-        <li><button on:click={() => goto('/received')}>Received</button></li>
-        <li><button on:click={() => goto('/sent')}>Sent</button></li>
-        <li class="right-section">
-            <div class="right-content">
-                {#if currentUser}
-                    <span class="user-id">ID: {currentUser.id}</span>
-                    <button class="copy-btn" on:click={copyUserId} title="Copy ID">
-                        {copySuccess ? '✓' : '📋'}
-                    </button>
-                {/if}
-                <button class="logout-btn" on:click={handleLogout}>Logout</button>
-            </div>
-        </li>
-    </ul>
-</nav>
-<div class="page-container">
-    <h1>Recommended to me</h1>
 
+<div class="page-container">
+    <h1>Recommended by me</h1>
     {#if loading}
         <p>Loading…</p>
     {:else}
@@ -110,9 +41,9 @@
             <ul class="reco-list">
                 {#each recommendations as r}
                     <li class="reco-item">
-                        <p>Recommended to you by {r.from_user}</p>
+                        <p>You recommended to {r.to_user}</p>
                         <iframe title="Video" src={r.link}></iframe>
-                    </li> 
+                    </li>
                 {/each}
             </ul>
         {/if}
@@ -172,6 +103,27 @@
         gap: 0.5rem;
     }
 
+    .navbar .user-id {
+        color: white;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: 'Arial', sans-serif;
+        white-space: nowrap;
+        min-width: 280px;
+    }
+
+    .navbar button.copy-btn {
+        padding: 0.5rem 1.2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        min-width: 60px;
+        width: 60px;
+    }
+
+    .navbar button.copy-btn:hover {
+        transform: scale(1.05);
+    }
+
     .navbar .brand {
         font-size: 1.3rem;
         font-weight: 700;
@@ -198,27 +150,6 @@
         background-color: white;
         color: #0077cc;
         border-color: #0077cc;
-    }
-
-    .navbar .user-id {
-        color: white;
-        font-size: 1rem;
-        font-weight: 600;
-        font-family: 'Arial', sans-serif;
-        white-space: nowrap;
-        min-width: 280px;
-    }
-
-    .navbar button.copy-btn {
-        padding: 0.5rem 1.2rem;
-        font-size: 1rem;
-        font-weight: 600;
-        min-width: 60px;
-        width: 60px;
-    }
-
-    .navbar button.copy-btn:hover {
-        transform: scale(1.05);
     }
 
     .navbar button.logout-btn {
