@@ -9,8 +9,8 @@
     async function new_reco() {
         error = '';
         success = false;
+
         const token = localStorage.getItem('access_token');
-        
         if (!token) {
             goto('/login');
             return;
@@ -25,33 +25,33 @@
                 },
                 body: JSON.stringify({
                     link: link,
-                    to_user_id: user_id
+                    to_user_id: Number(user_id)
                 })
             });
-            
-            if (!res.ok) {
-                // Check if it's an authentication error
-                if (res.status === 401) {
-                    localStorage.removeItem('access_token');
-                    localStorage.removeItem('current_user');
-                    goto('/login');
-                    return;
-                }
-                
-                const errorData = await res.json();
-                error = errorData.detail || 'Failed to create recommendation';
+
+            // Token expired / invalid
+            if (res.status === 401 || res.status === 403) {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('current_user');
+                goto('/login');
                 return;
             }
-            
+
+            if (!res.ok) {
+                let err = {};
+                try { err = await res.json(); } catch {}
+                error = err.detail || 'Failed to create recommendation';
+                return;
+            }
+
             // Success
             success = true;
-        } catch (err) {
-            error = err.message || 'An error occurred';
-            console.error('Failed to create the recommendation:', err);
-        } finally {
-            // Reset form
             link = '';
             user_id = '';
+
+        } catch (err) {
+            console.error(err);
+            error = 'Network error';
         }
     }
 </script>
