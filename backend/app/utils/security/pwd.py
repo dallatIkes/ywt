@@ -12,13 +12,13 @@ def hash_pwd(pwd: str) -> str:
     bytes = pwd.encode('utf-8')
     hash = bcrypt.hashpw(bytes, salt)
     
-    return hash
+    return hash.decode("utf-8") 
 
 def verify_pwd(given_pwd: str, hash: str) -> bool:
     """Checks if the given password is correct.
     """
     
-    return bcrypt.checkpw(given_pwd.encode("utf-8"), hash)
+    return bcrypt.checkpw(given_pwd.encode("utf-8"), hash.encode("utf-8"))
 
 def authenticate_user(username: str, pwd: str, session: Session) -> User | None:
     user = get_user_or_404(username, session)
