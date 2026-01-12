@@ -11,7 +11,7 @@ class User(Base):
     
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     username: Mapped[str] = mapped_column(String(20), nullable=False, unique=True, index=True)
-    hashed_password: Mapped[str] = mapped_column(String(50), nullable=False)
+    hashed_password: Mapped[str] = mapped_column(String(128), nullable=False)
 
     sent_recommendations: Mapped[list["Recommendation"]] = relationship(
         back_populates="from_user",
