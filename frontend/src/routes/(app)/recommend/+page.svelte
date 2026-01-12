@@ -1,12 +1,40 @@
 <script>
+    import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
-    
+
     let link = '';
     let user_id = '';
     let description = '';
     let error = '';
     let success = false;
-    
+
+    onMount(async () => {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            goto('/login');
+            return;
+        }
+
+        // Verify token is valid by making a request
+        try {
+            const res = await fetch('http://localhost:8000/recommendations/sent', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('current_user');
+                goto('/login');
+                return;
+            }
+        } catch (err) {
+            console.error(err);
+            goto('/login');
+        }
+    });
+
     async function new_reco() {
         error = '';
         success = false;
@@ -16,9 +44,9 @@
             goto('/login');
             return;
         }
-        
+
         try {
-            const res = await fetch('http://localhost:8000/recommendations/send', {
+            const res = await fetch('http://localhost:8000/users/mme', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -51,7 +79,6 @@
             link = '';
             description = '';
             user_id = '';
-
         } catch (err) {
             console.error(err);
             error = 'Network error';
@@ -62,14 +89,17 @@
 <div class="page-container">
     <form on:submit|preventDefault={new_reco}>
         <h1>Recommend a video to your friends</h1>
+
         <label>
             Your friend's ID:
             <input bind:value={user_id} placeholder="d1fb30d4-1259-4ffc-926a-e311e24907e2" required/>
         </label>
+
         <label>
             Video link:
             <input bind:value={link} placeholder="https://youtu.be/dQw4w9WgXcQ" required/>
         </label>
+
         <label>
             Quick description:
             <textarea 
@@ -80,7 +110,9 @@
             ></textarea>
             <span class="char-count">{description.length}/280</span>
         </label>
+
         <button type="submit">Recommend</button>
+
         {#if error}
             <p class="error">{error}</p>
         {:else if success}
