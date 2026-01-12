@@ -19,7 +19,7 @@
 
         // Verify token is valid by making a request
         try {
-            const res = await fetch(`${API_URL}/recommendations/sent`, {
+            const res = await fetch(`${API_URL}/users/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -48,7 +48,7 @@
         }
 
         try {
-            const res = await fetch(`${API_URL}/users/me`, {
+            const res = await fetch(`${API_URL}/recommendations/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
