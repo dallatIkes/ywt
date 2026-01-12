@@ -7,10 +7,6 @@ from app.auth import auth_router
 
 app = FastAPI(title="YWT")
 
-app.include_router(users_crud_router)
-app.include_router(recos_crud_router)
-app.include_router(auth_router)
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -22,3 +18,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(users_crud_router)
+app.include_router(recos_crud_router)
+app.include_router(auth_router)
