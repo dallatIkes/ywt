@@ -30,6 +30,7 @@ class Recommendation(Base):
     
     id: Mapped[int] = mapped_column(primary_key=True)
     link: Mapped[str] = mapped_column(nullable=False)
+    description: Mapped[str] = mapped_column(String(280), nullable=False)
     from_user_id: Mapped[str] = mapped_column(
         ForeignKey("users.id"),
         nullable=False

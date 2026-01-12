@@ -6,6 +6,7 @@ class UserBody(BaseModel):
     
 class RecoBody(BaseModel):
     link: str
+    description: str = Field(max_length=280)
     to_user_id: str
     
 class Token(BaseModel):

@@ -42,6 +42,7 @@
                 <li class="reco-item">
                     <p>Recommended to you by {r.from_user}</p>
                     <iframe title="Video" src={r.link}></iframe>
+                    <p>{r.description}</p>
                 </li>
             {/each}
         </ul>

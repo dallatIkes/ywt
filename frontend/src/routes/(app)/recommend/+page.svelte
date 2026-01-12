@@ -3,6 +3,7 @@
     
     let link = '';
     let user_id = '';
+    let description = '';
     let error = '';
     let success = false;
     
@@ -25,6 +26,7 @@
                 },
                 body: JSON.stringify({
                     link: link,
+                    description: description,
                     to_user_id: user_id
                 })
             });
@@ -47,6 +49,7 @@
             // Success
             success = true;
             link = '';
+            description = '';
             user_id = '';
 
         } catch (err) {
@@ -60,12 +63,22 @@
     <form on:submit|preventDefault={new_reco}>
         <h1>Recommend a video to your friends</h1>
         <label>
+            Your friend's ID:
+            <input bind:value={user_id} placeholder="d1fb30d4-1259-4ffc-926a-e311e24907e2" required/>
+        </label>
+        <label>
             Video link:
             <input bind:value={link} placeholder="https://youtu.be/dQw4w9WgXcQ" required/>
         </label>
         <label>
-            Your friend's ID:
-            <input bind:value={user_id} placeholder="d1fb30d4-1259-4ffc-926a-e311e24907e2" required/>
+            Quick description:
+            <textarea 
+                bind:value={description} 
+                placeholder="A cool nintendo playlist!" 
+                maxlength="280"
+                required
+            ></textarea>
+            <span class="char-count">{description.length}/280</span>
         </label>
         <button type="submit">Recommend</button>
         {#if error}
@@ -111,8 +124,9 @@
         display: flex;
         flex-direction: column;
         margin-bottom: 1rem;
-        font-weight: 500;
+        font-weight: 700;
         color: #555;
+        position: relative;
     }
 
     input {
@@ -124,9 +138,29 @@
         transition: border-color 0.2s;
     }
 
-    input:focus {
+    textarea {
+        padding: 0.6rem 0.8rem;
+        margin-top: 0.4rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-family: 'Arial', sans-serif;
+        resize: none;
+        min-height: 100px;
+        transition: border-color 0.2s;
+    }
+
+    input:focus,
+    textarea:focus {
         outline: none;
         border-color: #0077cc;
+    }
+
+    .char-count {
+        align-self: flex-end;
+        font-size: 0.85rem;
+        color: #888;
+        margin-top: 0.3rem;
     }
 
     button {

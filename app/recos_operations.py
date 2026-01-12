@@ -24,6 +24,7 @@ def add_new_reco(
     
     new_reco = Recommendation(
         link=normalize_youtube_link(reco.link), 
+        description= reco.description,
         from_user_id=current_user.id, 
         to_user_id=to_user.id, 
         created_at=datetime.datetime.now()
@@ -53,6 +54,7 @@ def get_sent_recos(
     return [
         {
             "link": r.Recommendation.link,
+            "description": r.Recommendation.description,
             "to_user": r.username
         }
         for r in recos
@@ -76,6 +78,7 @@ def get_reeceived_recos(
     return [
         {
             "link": r.Recommendation.link,
+            "description": r.Recommendation.description,
             "from_user": r.username
         }
         for r in recos
