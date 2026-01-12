@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     let currentUser = null;
     let copySuccess = false;
 
@@ -22,7 +24,7 @@
         try {
             // Fetch current user only if not cached
             if (!cachedUser) {
-                const userRes = await fetch('http://localhost:8000/users/me', {
+                const userRes = await fetch(`${API_URL}/users/me`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
