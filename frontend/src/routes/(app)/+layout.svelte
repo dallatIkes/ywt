@@ -167,11 +167,10 @@
 
     .navbar .user-id {
         color: white;
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 600;
-        font-family: 'Arial', sans-serif;
+        font-family: 'Courier New', monospace;
         white-space: nowrap;
-        min-width: 280px;
     }
 
     .navbar button.copy-btn {

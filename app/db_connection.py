@@ -7,6 +7,7 @@ DATABASE_URL = "sqlite:///./test.db"
 
 engine = create_engine(DATABASE_URL)
 
+# WARNING : uncomment to drop db
 # Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(engine)
 

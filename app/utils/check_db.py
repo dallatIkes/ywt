@@ -17,7 +17,7 @@ def get_user_or_404(username: str, db: Session) -> User:
 
     return user
 
-def get_user_with_id_or_404(id: int, db: Session) -> User:
+def get_user_with_id_or_404(id: str, db: Session) -> User:
     user = (
         db.query(User)
         .filter(User.id == id)
@@ -32,7 +32,7 @@ def get_user_with_id_or_404(id: int, db: Session) -> User:
 
     return user
 
-def get_reco_or_404(reco_id: int, db: Session) -> Recommendation:
+def get_reco_or_404(reco_id: str, db: Session) -> Recommendation:
     reco = (
         db.query(Recommendation)
         .filter(Recommendation.id == reco_id)

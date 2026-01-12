@@ -25,7 +25,7 @@
                 },
                 body: JSON.stringify({
                     link: link,
-                    to_user_id: Number(user_id)
+                    to_user_id: user_id
                 })
             });
 
@@ -65,7 +65,7 @@
         </label>
         <label>
             Your friend's ID:
-            <input bind:value={user_id} placeholder="1" required/>
+            <input bind:value={user_id} placeholder="d1fb30d4-1259-4ffc-926a-e311e24907e2" required/>
         </label>
         <button type="submit">Recommend</button>
         {#if error}

@@ -6,7 +6,7 @@ class UserBody(BaseModel):
     
 class RecoBody(BaseModel):
     link: str
-    to_user_id: int
+    to_user_id: str
     
 class Token(BaseModel):
     access_token: str
