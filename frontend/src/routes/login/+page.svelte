@@ -1,5 +1,7 @@
 <script>
     import { goto } from '$app/navigation';
+
+    const API_URL = import.meta.env.VITE_API_URL;
     
     let username = '';
     let password = '';
@@ -9,7 +11,7 @@
         error = '';
         
         // Calling the /token endpoint
-        const res = await fetch('http://localhost:8000/token', {
+        const res = await fetch(`${API_URL}/token`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ username, password })
@@ -28,7 +30,7 @@
         
         // Fetch and store current user info
         try {
-            const userRes = await fetch('http://localhost:8000/users/me', {
+            const userRes = await fetch(`${API_URL}/users/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

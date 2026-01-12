@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     let recommendations = [];
     let loading = true;
 
@@ -13,7 +15,7 @@
             return;
         }
 
-        const res = await fetch('http://localhost:8000/recommendations/received', {
+        const res = await fetch(`${API_URL}/recommendations/received`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

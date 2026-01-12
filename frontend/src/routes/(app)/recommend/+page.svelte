@@ -2,6 +2,8 @@
     import { onMount } from 'svelte';
     import { goto } from '$app/navigation';
 
+    const API_URL = import.meta.env.VITE_API_URL;
+
     let link = '';
     let user_id = '';
     let description = '';
@@ -17,7 +19,7 @@
 
         // Verify token is valid by making a request
         try {
-            const res = await fetch('http://localhost:8000/recommendations/sent', {
+            const res = await fetch(`${API_URL}/recommendations/sent`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -46,7 +48,7 @@
         }
 
         try {
-            const res = await fetch('http://localhost:8000/users/mme', {
+            const res = await fetch(`${API_URL}/users/me`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
