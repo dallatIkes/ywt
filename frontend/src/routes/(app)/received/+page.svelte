@@ -26,7 +26,7 @@
             return;
         }
 
-        recommendations = await res.json();
+        recommendations = (await res.json()).reverse();
         loading = false;
     });
 </script>
