@@ -1,0 +1,1 @@
+Core application package containing all business logic, API routes, and internal modules.

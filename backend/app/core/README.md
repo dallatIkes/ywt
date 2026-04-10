@@ -1,0 +1,1 @@
+Holds core configuration, settings, and shared utilities used across the application.
