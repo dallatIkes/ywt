@@ -9,10 +9,7 @@ app = FastAPI(title="YWT")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://ywt-tau.vercel.app"
-    ],
+    allow_origins=["http://localhost:5173", "https://ywt-tau.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

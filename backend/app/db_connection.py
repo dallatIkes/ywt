@@ -15,16 +15,13 @@ engine = create_engine(DATABASE_URL)
 # Base.metadata.drop_all(bind=engine)
 Base.metadata.create_all(engine)
 
-SessionLocal = sessionmaker(
-	autocommit=False,
-	autoflush=False,
-	bind=engine
-)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 # Get the database session
 def get_db():
-	db = SessionLocal()
-	try:
-		yield db
-	finally:
-		db.close()
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()

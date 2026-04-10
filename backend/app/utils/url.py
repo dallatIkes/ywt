@@ -1,5 +1,6 @@
 from urllib.parse import urlparse, parse_qs, urlencode
 
+
 def normalize_youtube_link(url: str) -> str:
     try:
         parsed = urlparse(url)
