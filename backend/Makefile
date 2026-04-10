@@ -37,7 +37,7 @@ db-clean:
 	@echo ""
 	rm -rf ./app/db/*.db
 
-db-seed:
+db-seed: db-clean
 	@echo "============================================"
 	@echo "🌱 Seeding database with test data"
 	@echo "--------------------------------------------"
