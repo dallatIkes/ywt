@@ -2,7 +2,10 @@
 from app.db.session import SessionLocal, engine
 from app.db.base import Base
 from app.db.models.user import User
-from app.db.models import Recommendation, Friendship  # noqa: F401 - needed for SQLAlchemy relationship resolution
+from app.db.models import (  # noqa: F401 - needed for SQLAlchemy relationship resolution
+    Recommendation,
+    Friendship,
+)
 from app.core.security import hash_pwd
 
 
