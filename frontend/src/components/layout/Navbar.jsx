@@ -15,13 +15,6 @@ export default function Navbar() {
         navigate('/login')
     }
 
-    async function copyId() {
-        if (!currentUser?.id) return
-        await navigator.clipboard.writeText(currentUser.id)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-    }
-
     function isActive(path) {
         return location.pathname === path ? 'nav-btn active' : 'nav-btn'
     }
@@ -40,12 +33,6 @@ export default function Navbar() {
                 </div>
 
                 <div className="nav-right">
-                    {currentUser && (
-                        <span className="user-id">ID: {currentUser.id}</span>
-                    )}
-                    <button className="btn-copy" onClick={copyId} title="Copy ID">
-                        {copied ? '✓' : '📋'}
-                    </button>
                     <button className="btn-logout" onClick={handleLogout}>Logout</button>
                 </div>
             </div>

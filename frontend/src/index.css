@@ -4,8 +4,27 @@
   box-sizing: border-box;
 }
 
+:root {
+  --blue: #0077cc;
+  --blue-dark: #005fa3;
+  --blue-light: #e8f4fd;
+  --red: #dc3545;
+  --green: #1b7a4a;
+  --bg: #f0f2f5;
+  --card: #ffffff;
+  --text: #1a1a2e;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --shadow-hover: 0 8px 24px rgba(0, 119, 204, 0.15);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f0f2f5;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
 }

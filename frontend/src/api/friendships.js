@@ -10,6 +10,11 @@ export async function getPendingRequests() {
     return data
 }
 
+export async function getSentPendingRequests() {
+    const { data } = await client.get('/friendships/pending-sent')
+    return data
+}
+
 export async function sendFriendRequest(addresseeId) {
     const { data } = await client.post('/friendships/request', {
         addressee_id: addresseeId,

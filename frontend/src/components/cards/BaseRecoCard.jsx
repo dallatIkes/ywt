@@ -15,30 +15,37 @@ export default function BaseRecoCard({ reco, direction, onRate, player }) {
 
             <div className="reco-meta">
                 <p className="reco-description">{reco.description}</p>
+
+                {/* Rating */}
+                {isReceived && (
+                    <div className="reco-rating">
+                        <div className="reco-rating-inner">
+                            {[5, 4, 3, 2, 1].map((star) => (
+                                <button
+                                    key={star}
+                                    className={`star ${reco.rating >= star ? 'filled' : ''}`}
+                                    onClick={() => onRate?.(reco.id, star)}
+                                    title={`Rate ${star}`}
+                                >
+                                    ★
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {!isReceived && reco.rating && (
+                    <p className="reco-rated">{'★'.repeat(reco.rating)}{'☆'.repeat(5 - reco.rating)}</p>
+                )}
+
                 <div className="reco-footer">
                     <span className="reco-user">
-                        {isReceived ? `From: ${reco.from_user}` : `To: ${reco.to_user}`}
+                        {isReceived ? `From ${reco.from_user}` : `To ${reco.to_user}`}
                     </span>
                     <span className="reco-date">
                         {new Date(reco.created_at).toLocaleDateString()}
                     </span>
                 </div>
-                {isReceived && (
-                    <div className="reco-rating">
-                        {[1, 2, 3, 4, 5].map((star) => (
-                            <button
-                                key={star}
-                                className={`star ${reco.rating >= star ? 'filled' : ''}`}
-                                onClick={() => onRate?.(reco.id, star)}
-                            >
-                                ★
-                            </button>
-                        ))}
-                    </div>
-                )}
-                {!isReceived && reco.rating && (
-                    <p className="reco-rated">Rated: {'★'.repeat(reco.rating)}</p>
-                )}
             </div>
         </div>
     )
