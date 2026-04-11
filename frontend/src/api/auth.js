@@ -6,8 +6,11 @@ export async function login(username, password) {
     form.append('username', username)
     form.append('password', password)
 
-    const { data } = await client.post('/token', form)
-    return data // { access_token, token_type }
+    const response = await client.post('/token', form, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        skipAuthRedirect: true,   // flag custom
+    })
+    return response.data
 }
 
 export async function register(username, password) {
