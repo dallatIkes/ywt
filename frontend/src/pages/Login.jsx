@@ -20,6 +20,7 @@ export default function Login() {
       navigate('/received')
     } catch (err) {
       setError(err.response?.data?.detail ?? 'Login failed')
+      setPassword('')
     } finally {
       setLoading(false)
     }
