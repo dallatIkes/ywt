@@ -42,6 +42,7 @@ export default function Friends() {
             setSuccess('Friend request sent!')
             setNewId('')
             setPendingSent((prev) => [...prev, req])
+            getSentPendingRequests().then(setPendingSent)
         } catch (err) {
             setError(err.response?.data?.detail ?? 'Failed to send request')
         }
