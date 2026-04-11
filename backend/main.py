@@ -9,8 +9,20 @@ from app.core.exceptions import (
     UnauthorizedError,
 )
 from app.routers import auth, users, recommendations, friendships
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Yo Watch This!", version="1.0.0")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:8000",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # ── Exception handlers ────────────────────────────────────────────────────────
 

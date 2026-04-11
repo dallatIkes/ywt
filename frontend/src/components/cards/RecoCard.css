@@ -1,0 +1,85 @@
+.reco-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.reco-player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+}
+
+.reco-player iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
+
+.reco-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #0077cc;
+    font-size: 0.85rem;
+    word-break: break-all;
+    padding: 1rem;
+}
+
+.reco-meta {
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.reco-description {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #222;
+    line-height: 1.4;
+}
+
+.reco-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.reco-rating {
+    display: flex;
+    gap: 4px;
+}
+
+.star {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: #ccc;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.1s, transform 0.1s;
+}
+
+.star:hover,
+.star.filled {
+    color: #f5a623;
+}
+
+.star:hover {
+    transform: scale(1.2);
+}
+
+.reco-rated {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #f5a623;
+}

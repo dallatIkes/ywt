@@ -1,0 +1,36 @@
+.recommend-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    max-width: 560px;
+}
+
+.recommend-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.field select,
+.field textarea {
+    padding: 0.6rem 0.8rem;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+    resize: vertical;
+}
+
+.field select:focus,
+.field textarea:focus {
+    border-color: #0077cc;
+}
+
+.char-count {
+    font-size: 0.75rem;
+    color: #999;
+    text-align: right;
+}
