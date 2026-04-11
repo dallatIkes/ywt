@@ -80,4 +80,18 @@ def test_get_pending_requests(friendship_service, user_john, user_jane):
     friendship_service.send_request(user_john, user_jane.id)
     pending = friendship_service.get_pending_requests(user_jane)
     assert len(pending) == 1
-    assert pending[0].requester_id == user_john.id
+    assert pending[0]["requester_id"] == user_john.id
+
+
+def test_pending_requests_include_usernames(friendship_service, user_john, user_jane):
+    friendship_service.send_request(user_john, user_jane.id)
+    pending = friendship_service.get_pending_requests(user_jane)
+    assert pending[0]["requester_username"] == "johnDoe"
+    assert pending[0]["addressee_username"] == "janeDoe"
+
+
+def test_sent_pending_include_usernames(friendship_service, user_john, user_jane):
+    friendship_service.send_request(user_john, user_jane.id)
+    sent = friendship_service.get_sent_pending_requests(user_john)
+    assert sent[0]["requester_username"] == "johnDoe"
+    assert sent[0]["addressee_username"] == "janeDoe"

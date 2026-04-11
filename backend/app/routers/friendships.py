@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
-
 from app.schemas.friendship import (
     FriendRequestCreate,
     FriendRequestOut,
+    FriendshipOut,
     FriendOut,
     FriendshipStatusUpdate,
 )
@@ -14,7 +14,7 @@ router = APIRouter(prefix="/friendships", tags=["friendships"])
 
 
 @router.post(
-    "/request", response_model=FriendRequestOut, status_code=status.HTTP_201_CREATED
+    "/request", response_model=FriendshipOut, status_code=status.HTTP_201_CREATED
 )
 def send_friend_request(
     data: FriendRequestCreate,
@@ -24,7 +24,7 @@ def send_friend_request(
     return service.send_request(current_user, data.addressee_id)
 
 
-@router.patch("/{friendship_id}/respond", response_model=FriendRequestOut)
+@router.patch("/{friendship_id}/respond", response_model=FriendshipOut)
 def respond_to_request(
     friendship_id: int,
     data: FriendshipStatusUpdate,
@@ -48,3 +48,11 @@ def get_pending_requests(
     current_user: User = Depends(get_current_user),
 ):
     return service.get_pending_requests(current_user)
+
+
+@router.get("/pending-sent", response_model=list[FriendRequestOut])
+def get_sent_pending_requests(
+    service: FriendshipService = Depends(get_friendship_service),
+    current_user: User = Depends(get_current_user),
+):
+    return service.get_sent_pending_requests(current_user)

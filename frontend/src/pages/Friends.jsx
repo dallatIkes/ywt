@@ -101,7 +101,7 @@ export default function Friends() {
                             <li key={req.id} className="friend-item">
                                 <div className="friend-avatar">?</div>
                                 <div className="friend-info">
-                                    <span className="friend-name">{req.requester_id}</span>
+                                    <span className="friend-name">{req.requester_username}</span>
                                     <span className="friend-sub">wants to be your friend</span>
                                 </div>
                                 <div className="friend-actions">
@@ -126,7 +126,7 @@ export default function Friends() {
                             <li key={req.id} className="friend-item">
                                 <div className="friend-avatar pending-avatar">…</div>
                                 <div className="friend-info">
-                                    <span className="friend-name">{req.addressee_id}</span>
+                                    <span className="friend-name">{req.addressee_username}</span>
                                     <span className="friend-sub">pending response</span>
                                 </div>
                                 <span className="pending-chip">Pending</span>

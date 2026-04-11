@@ -3,24 +3,32 @@ from datetime import datetime
 
 
 class FriendRequestCreate(BaseModel):
-    # The user ID to send a friend request to
     addressee_id: str
 
 
 class FriendshipStatusUpdate(BaseModel):
-    # Accepted values: "accepted" or "declined"
     status: str
 
 
 class FriendOut(BaseModel):
-    # Represents a confirmed friend in the friend list
     id: str
     username: str
     model_config = ConfigDict(from_attributes=True)
 
 
 class FriendRequestOut(BaseModel):
-    # Represents a pending friend request
+    # Enriched — used for pending lists (includes usernames)
+    id: int
+    requester_id: str
+    requester_username: str
+    addressee_id: str
+    addressee_username: str
+    status: str
+    created_at: datetime
+
+
+class FriendshipOut(BaseModel):
+    # Simple — used for send/respond (ORM object, no join needed)
     id: int
     requester_id: str
     addressee_id: str

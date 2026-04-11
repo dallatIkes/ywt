@@ -4,6 +4,7 @@ def test_send_friend_request(auth_client, user_jane):
     )
     assert response.status_code == 201
     assert response.json()["status"] == "pending"
+    assert "requester_id" in response.json()
 
 
 def test_send_request_to_self(auth_client, user_john):
@@ -70,6 +71,8 @@ def test_get_pending(auth_client, auth_client_jane, user_jane):
     response = auth_client_jane.get("/friendships/pending")
     assert response.status_code == 200
     assert len(response.json()) == 1
+    assert "requester_username" in response.json()[0]
+    assert "addressee_username" in response.json()[0]
 
 
 def test_requires_auth(client, user_jane):

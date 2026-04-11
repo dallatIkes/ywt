@@ -67,3 +67,6 @@ class FriendshipService:
 
     def get_pending_requests(self, user: User) -> list[Friendship]:
         return self.friendship_repo.get_pending_received(user.id)
+
+    def get_sent_pending_requests(self, user: User) -> list[Friendship]:
+        return self.friendship_repo.get_pending_sent(user.id)
