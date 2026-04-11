@@ -68,6 +68,13 @@ verbose_test:
 	@echo ""
 	$(PYTHON_VENV) -m pytest -vv
 
+cov:
+	@echo "============================================"
+	@echo "🧪 Running tests with coverage"
+	@echo "--------------------------------------------"
+	@echo ""
+	$(PYTHON_VENV) -m pytest --cov=app tests/ --cov-report=term-missing
+
 lint:
 	@echo "============================================"
 	@echo "🔍 Checking code style with flake8"
