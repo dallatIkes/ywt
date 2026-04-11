@@ -1,222 +1,226 @@
 .recommend-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    align-items: start;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
 }
 
 .recommend-form-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 1.5rem;
-    border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
 }
 
 .recommend-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .field label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #444;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
 }
 
 .field input,
 .field select,
 .field textarea {
-    padding: 0.6rem 0.85rem;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 0.95rem;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    resize: vertical;
-    background: white;
+  padding: 0.6rem 0.85rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  resize: vertical;
+  background: white;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.1);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.1);
 }
 
 .char-count {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    text-align: right;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
 }
 
 .recommend-preview {
-    background: #0a0a0a;
-    border-radius: var(--radius);
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
-    position: sticky;
-    top: 72px;
-    box-shadow: var(--shadow);
+  background: #0a0a0a;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  position: sticky;
+  top: 72px;
+  box-shadow: var(--shadow);
 }
 
 .recommend-preview iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
 }
 
 .preview-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    color: #555;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #555;
 }
 
 .preview-icon {
-    font-size: 2.5rem;
-    opacity: 0.4;
+  font-size: 2.5rem;
+  opacity: 0.4;
 }
 
 .preview-placeholder p {
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 0 1.5rem;
-    opacity: 0.6;
-    margin: 0;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0 1.5rem;
+  opacity: 0.6;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
-    .recommend-layout {
-        grid-template-columns: 1fr;
-    }
+  .recommend-layout {
+    grid-template-columns: 1fr;
+  }
 
-    .recommend-preview {
-        position: static;
-    }
+  .recommend-preview {
+    position: static;
+  }
 }
 
 /* src/pages/Recommend.css */
 .recommend-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    align-items: start;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
 }
 
 .recommend-form-card {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 1.5rem;
-    border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
 }
 
 .recommend-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .field label {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #444;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #444;
 }
 
 .field input,
 .field select,
 .field textarea {
-    padding: 0.6rem 0.85rem;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 0.95rem;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.15s, box-shadow 0.15s;
-    resize: vertical;
-    background: white;
+  padding: 0.6rem 0.85rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  resize: vertical;
+  background: white;
 }
 
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.1);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(0, 119, 204, 0.1);
 }
 
 .char-count {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    text-align: right;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
 }
 
 .recommend-preview {
-    background: #0a0a0a;
-    border-radius: var(--radius);
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
-    position: sticky;
-    top: 72px;
-    box-shadow: var(--shadow);
+  background: #0a0a0a;
+  border-radius: var(--radius);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  position: sticky;
+  top: 72px;
+  box-shadow: var(--shadow);
 }
 
 .recommend-preview iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
 }
 
 .preview-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    color: #555;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  color: #555;
 }
 
 .preview-icon {
-    font-size: 2.5rem;
-    opacity: 0.4;
+  font-size: 2.5rem;
+  opacity: 0.4;
 }
 
 .preview-placeholder p {
-    font-size: 0.85rem;
-    text-align: center;
-    padding: 0 1.5rem;
-    opacity: 0.6;
-    margin: 0;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 0 1.5rem;
+  opacity: 0.6;
+  margin: 0;
 }
 
 @media (max-width: 768px) {
-    .recommend-layout {
-        grid-template-columns: 1fr;
-    }
+  .recommend-layout {
+    grid-template-columns: 1fr;
+  }
 
-    .recommend-preview {
-        position: static;
-    }
+  .recommend-preview {
+    position: static;
+  }
 }

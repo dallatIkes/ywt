@@ -4,9 +4,9 @@ import {
     getPendingRequests,
     getSentPendingRequests,
     sendFriendRequest,
-    respondToRequest
+    respondToRequest,
 } from '../api/friendships'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import './Page.css'
 import './Friends.css'
 
@@ -21,9 +21,15 @@ export default function Friends() {
     const [copied, setCopied] = useState(false)
 
     useEffect(() => {
-        getFriends().then(setFriends).catch(() => { })
-        getPendingRequests().then(setPendingReceived).catch(() => { })
-        getSentPendingRequests().then(setPendingSent).catch(() => { })
+        getFriends()
+            .then(setFriends)
+            .catch(() => { })
+        getPendingRequests()
+            .then(setPendingReceived)
+            .catch(() => { })
+        getSentPendingRequests()
+            .then(setPendingSent)
+            .catch(() => { })
     }, [])
 
     async function copyId() {
@@ -84,10 +90,20 @@ export default function Friends() {
                         placeholder="Paste a friend's user ID"
                         required
                     />
-                    <button type="submit" className="btn-primary">Send request</button>
+                    <button type="submit" className="btn-primary">
+                        Send request
+                    </button>
                 </form>
-                {error && <p className="form-error" style={{ marginTop: '0.5rem' }}>{error}</p>}
-                {success && <p className="form-success" style={{ marginTop: '0.5rem' }}>{success}</p>}
+                {error && (
+                    <p className="form-error" style={{ marginTop: '0.5rem' }}>
+                        {error}
+                    </p>
+                )}
+                {success && (
+                    <p className="form-success" style={{ marginTop: '0.5rem' }}>
+                        {success}
+                    </p>
+                )}
             </section>
 
             {/* Pending received */}
@@ -106,8 +122,18 @@ export default function Friends() {
                                     <span className="friend-sub">wants to be your friend</span>
                                 </div>
                                 <div className="friend-actions">
-                                    <button className="btn-accept" onClick={() => handleRespond(req.id, 'accepted')}>Accept</button>
-                                    <button className="btn-decline" onClick={() => handleRespond(req.id, 'declined')}>Decline</button>
+                                    <button
+                                        className="btn-accept"
+                                        onClick={() => handleRespond(req.id, 'accepted')}
+                                    >
+                                        Accept
+                                    </button>
+                                    <button
+                                        className="btn-decline"
+                                        onClick={() => handleRespond(req.id, 'declined')}
+                                    >
+                                        Decline
+                                    </button>
                                 </div>
                             </li>
                         ))}
@@ -149,7 +175,9 @@ export default function Friends() {
                     <ul className="friends-list">
                         {friends.map((f) => (
                             <li key={f.id} className="friend-item">
-                                <div className="friend-avatar">{f.username[0].toUpperCase()}</div>
+                                <div className="friend-avatar">
+                                    {f.username[0].toUpperCase()}
+                                </div>
                                 <div className="friend-info">
                                     <span className="friend-name">{f.username}</span>
                                     <span className="friend-sub friend-id-text">{f.id}</span>
