@@ -22,7 +22,9 @@ export default function Sent() {
     <div className="page">
       <h2 className="page-title">Sent</h2>
       {recos.length === 0 ? (
-        <p className="page-empty">You haven&apos;t sent any recommendations yet.</p>
+        <p className="page-empty">
+          You haven&apos;t sent any recommendations yet.
+        </p>
       ) : (
         <div className="card-grid">
           {recos.map((reco) => (

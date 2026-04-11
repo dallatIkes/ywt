@@ -17,14 +17,14 @@ export default defineConfig({
         theme_color: '#0077cc',
         icons: [
           { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: '/icon-512.png', sizes: '512x512', type: 'image/png' }
-        ]
-      }
-    })
+          { src: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+        ],
+      },
+    }),
   ],
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: './tests/setup.js',
-  }
+  },
 })
