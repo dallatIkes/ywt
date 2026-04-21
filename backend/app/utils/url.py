@@ -1,0 +1,131 @@
+from abc import ABC, abstractmethod
+from urllib.parse import urlparse, parse_qs, urlencode
+
+# ── Strategy interface ────────────────────────────────────────────────────────
+
+
+class VideoLinkNormalizer(ABC):
+    """Strategy interface — all normalizers must implement these two methods."""
+
+    @abstractmethod
+    def matches(self, url: str) -> bool:
+        """Returns True if this strategy handles the given URL."""
+        ...
+
+    @abstractmethod
+    def normalize(self, url: str) -> str:
+        """Returns a normalized embeddable URL."""
+        ...
+
+
+# ── Concrete strategies ───────────────────────────────────────────────────────
+
+
+class YouTubeNormalizer(VideoLinkNormalizer):
+    """Handles youtube.com and youtu.be URLs."""
+
+    def matches(self, url: str) -> bool:
+        try:
+            hostname = urlparse(url).hostname or ""
+            return hostname == "youtu.be" or "youtube.com" in hostname
+        except Exception:
+            return False
+
+    def normalize(self, url: str) -> str:
+        try:
+            parsed = urlparse(url)
+            params = parse_qs(parsed.query)
+            video_id = None
+
+            if parsed.hostname == "youtu.be":
+                video_id = parsed.path[1:]
+            elif parsed.hostname and "youtube.com" in parsed.hostname:
+                video_id = params.get("v", [None])[0]
+
+            if not video_id:
+                return self._fallback()
+
+            # Keep extra params (playlist, timestamp) but drop v=
+            params.pop("v", None)
+            query = f"?{urlencode(params, doseq=True)}" if params else ""
+            return f"https://youtube.com/embed/{video_id}{query}"
+
+        except Exception:
+            return self._fallback()
+
+    def _fallback(self) -> str:
+        return "https://youtube.com/embed/dQw4w9WgXcQ"
+
+
+class VimeoNormalizer(VideoLinkNormalizer):
+    """Handles vimeo.com URLs."""
+
+    def matches(self, url: str) -> bool:
+        try:
+            return "vimeo.com" in (urlparse(url).hostname or "")
+        except Exception:
+            return False
+
+    def normalize(self, url: str) -> str:
+        try:
+            path = urlparse(url).path
+            # vimeo.com/123456789 → player.vimeo.com/video/123456789
+            video_id = path.strip("/").split("/")[0]
+            if not video_id.isdigit():
+                return url
+            return f"https://player.vimeo.com/video/{video_id}"
+        except Exception:
+            return url
+
+
+class DailymotionNormalizer(VideoLinkNormalizer):
+    """Handles dailymotion.com URLs."""
+
+    def matches(self, url: str) -> bool:
+        try:
+            return "dailymotion.com" in (urlparse(url).hostname or "")
+        except Exception:
+            return False
+
+    def normalize(self, url: str) -> str:
+        try:
+            # dailymotion.com/video/x9abc12
+            video_id = urlparse(url).path.split("/")[-1]
+            if not video_id:
+                return url
+            return f"https://www.dailymotion.com/embed/video/{video_id}"
+        except Exception:
+            return url
+
+
+class PassthroughNormalizer(VideoLinkNormalizer):
+    """Fallback — returns the URL as-is for unsupported platforms."""
+
+    def matches(self, url: str) -> bool:
+        # Always matches — used as fallback
+        return True
+
+    def normalize(self, url: str) -> str:
+        return url
+
+
+# ── Factory ───────────────────────────────────────────────────────────────────
+# To add a new platform: instantiate its strategy and add it to the dict.
+# normalize_link() picks it up automatically — nothing else changes.
+
+NORMALIZERS: dict[str, VideoLinkNormalizer] = {
+    "youtube": YouTubeNormalizer(),
+    "vimeo": VimeoNormalizer(),
+    "dailymotion": DailymotionNormalizer(),
+    "passthrough": PassthroughNormalizer(),
+}
+
+
+def normalize_link(url: str) -> str:
+    """Factory function — finds the first matching strategy and normalizes."""
+    for name, normalizer in NORMALIZERS.items():
+        if name == "passthrough":
+            continue  # checked last
+        if normalizer.matches(url):
+            return normalizer.normalize(url)
+    return NORMALIZERS["passthrough"].normalize(url)
