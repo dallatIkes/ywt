@@ -1,8 +1,47 @@
+// src/pages/Recommend.jsx
 import { useState, useEffect } from 'react'
 import { sendReco } from '../api/recommendations'
 import { getFriends } from '../api/friendships'
+import { getMediaStrategy } from '../lib/mediaStrategies'
 import './Page.css'
 import './Recommend.css'
+
+function Preview({ url }) {
+  if (!url) {
+    return (
+      <div className="preview-placeholder">
+        <span className="preview-icon">▶</span>
+        <p>Paste a media link to preview the video</p>
+      </div>
+    )
+  }
+
+  const strategy = getMediaStrategy(url)
+  const embedUrl = strategy.buildEmbedUrl(url)
+
+  if (embedUrl) {
+    return (
+      <iframe
+        src={embedUrl}
+        title="Video preview"
+        frameBorder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        allowFullScreen
+      />
+    )
+  }
+
+  // Valid URL but no embed available — show link preview
+  return (
+    <div className="preview-external">
+      <span className="preview-icon">🔗</span>
+      <p className="preview-url">{url}</p>
+      <a href={url} target="_blank" rel="noreferrer" className="preview-open">
+        Open link
+      </a>
+    </div>
+  )
+}
 
 export default function Recommend() {
   const [friends, setFriends] = useState([])
@@ -12,35 +51,10 @@ export default function Recommend() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [previewUrl, setPreviewUrl] = useState(null)
 
   useEffect(() => {
-    getFriends()
-      .then(setFriends)
-      .catch(() => {})
+    getFriends().then(setFriends).catch(() => { })
   }, [])
-
-  // Build embed URL from raw YouTube link for preview
-  function buildPreview(url) {
-    try {
-      const parsed = new URL(url)
-      let videoId = null
-      if (parsed.hostname === 'youtu.be') {
-        videoId = parsed.pathname.slice(1)
-      } else if (parsed.hostname.includes('youtube.com')) {
-        videoId = parsed.searchParams.get('v')
-      }
-      return videoId ? `https://www.youtube.com/embed/${videoId}` : null
-    } catch {
-      return null
-    }
-  }
-
-  function handleLinkChange(e) {
-    const val = e.target.value
-    setLink(val)
-    setPreviewUrl(buildPreview(val))
-  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -53,7 +67,6 @@ export default function Recommend() {
       setLink('')
       setDescription('')
       setSelectedId('')
-      setPreviewUrl(null)
     } catch (err) {
       setError(err.response?.data?.detail ?? 'Failed to send recommendation')
     } finally {
@@ -79,9 +92,7 @@ export default function Recommend() {
                 >
                   <option value="">Select a friend...</option>
                   {friends.map((f) => (
-                    <option key={f.id} value={f.id}>
-                      {f.username}
-                    </option>
+                    <option key={f.id} value={f.id}>{f.username}</option>
                   ))}
                 </select>
               ) : (
@@ -96,12 +107,12 @@ export default function Recommend() {
             </div>
 
             <div className="field">
-              <label>YouTube link</label>
+              <label>Media link</label>
               <input
                 type="url"
                 value={link}
-                onChange={handleLinkChange}
-                placeholder="https://youtube.com/watch?v=..."
+                onChange={(e) => setLink(e.target.value)}
+                placeholder="YouTube, Vimeo, or any video link..."
                 required
               />
             </div>
@@ -128,22 +139,9 @@ export default function Recommend() {
           </form>
         </div>
 
-        {/* Right: preview */}
+        {/* Right: preview — updates live as user types */}
         <div className="recommend-preview">
-          {previewUrl ? (
-            <iframe
-              src={previewUrl}
-              title="Video preview"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : (
-            <div className="preview-placeholder">
-              <span className="preview-icon">▶</span>
-              <p>Paste a YouTube link to preview the video</p>
-            </div>
-          )}
+          <Preview url={link} />
         </div>
       </div>
     </div>
