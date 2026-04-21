@@ -135,10 +135,7 @@ class RecommendationService:
 
     @log_service_call("answer_recommendation")
     def answer_reco(
-        self,
-        reco_id: int,
-        data: AnswerUpdate,
-        current_user: User
+        self, reco_id: int, data: AnswerUpdate, current_user: User
     ) -> Recommendation:
         reco = self.reco_repo.get_or_404(reco_id)
 

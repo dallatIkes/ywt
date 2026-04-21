@@ -55,6 +55,6 @@ def answer_reco(
     reco_id: int,
     data: AnswerUpdate,
     service: RecommendationService = Depends(get_reco_service),
-    current_user: User = Depends(get_current_user)
+    current_user: User = Depends(get_current_user),
 ):
     return service.answer_reco(reco_id, data, current_user)

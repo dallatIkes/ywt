@@ -103,13 +103,11 @@ def test_answer_reco(reco_service, user_john, user_jane):
     data = RecoCreate(
         link="https://youtu.be/dQw4w9WgXcQ",
         description="Watch this",
-        to_user_id=user_jane.id
+        to_user_id=user_jane.id,
     )
     reco = reco_service.send_reco(data, user_john)
     answered = reco_service.answer_reco(
-        reco.id,
-        AnswerUpdate(answer="Loved it!"),
-        user_jane
+        reco.id, AnswerUpdate(answer="Loved it!"), user_jane
     )
     assert answered.answer == "Loved it!"
 
@@ -118,7 +116,7 @@ def test_answer_reco_wrong_user_raises_forbidden(reco_service, user_john, user_j
     data = RecoCreate(
         link="https://youtu.be/dQw4w9WgXcQ",
         description="Watch this",
-        to_user_id=user_jane.id
+        to_user_id=user_jane.id,
     )
     reco = reco_service.send_reco(data, user_john)
     with pytest.raises(ForbiddenError):
@@ -129,7 +127,7 @@ def test_answer_reco_twice_raises_conflict(reco_service, user_john, user_jane):
     data = RecoCreate(
         link="https://youtu.be/dQw4w9WgXcQ",
         description="Watch this",
-        to_user_id=user_jane.id
+        to_user_id=user_jane.id,
     )
     reco = reco_service.send_reco(data, user_john)
     reco_service.answer_reco(reco.id, AnswerUpdate(answer="Loved it!"), user_jane)

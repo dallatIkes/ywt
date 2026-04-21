@@ -95,44 +95,49 @@ def test_rate_reco_wrong_user(auth_client, user_jane):
 
 
 def test_answer_reco(auth_client, auth_client_jane, user_jane):
-    reco = auth_client.post("/recommendations/send", json={
-        "link": "https://youtu.be/dQw4w9WgXcQ",
-        "description": "Watch this!",
-        "to_user_id": user_jane.id
-    }).json()
+    reco = auth_client.post(
+        "/recommendations/send",
+        json={
+            "link": "https://youtu.be/dQw4w9WgXcQ",
+            "description": "Watch this!",
+            "to_user_id": user_jane.id,
+        },
+    ).json()
     response = auth_client_jane.patch(
-        f"/recommendations/{reco['id']}/answer",
-        json={"answer": "Loved it!"}
+        f"/recommendations/{reco['id']}/answer", json={"answer": "Loved it!"}
     )
     assert response.status_code == 200
     assert response.json()["answer"] == "Loved it!"
 
 
 def test_answer_reco_wrong_user(auth_client, user_jane):
-    reco = auth_client.post("/recommendations/send", json={
-        "link": "https://youtu.be/dQw4w9WgXcQ",
-        "description": "Watch this!",
-        "to_user_id": user_jane.id
-    }).json()
+    reco = auth_client.post(
+        "/recommendations/send",
+        json={
+            "link": "https://youtu.be/dQw4w9WgXcQ",
+            "description": "Watch this!",
+            "to_user_id": user_jane.id,
+        },
+    ).json()
     response = auth_client.patch(
-        f"/recommendations/{reco['id']}/answer",
-        json={"answer": "Loved it!"}
+        f"/recommendations/{reco['id']}/answer", json={"answer": "Loved it!"}
     )
     assert response.status_code == 403
 
 
 def test_answer_reco_twice(auth_client, auth_client_jane, user_jane):
-    reco = auth_client.post("/recommendations/send", json={
-        "link": "https://youtu.be/dQw4w9WgXcQ",
-        "description": "Watch this!",
-        "to_user_id": user_jane.id
-    }).json()
+    reco = auth_client.post(
+        "/recommendations/send",
+        json={
+            "link": "https://youtu.be/dQw4w9WgXcQ",
+            "description": "Watch this!",
+            "to_user_id": user_jane.id,
+        },
+    ).json()
     auth_client_jane.patch(
-        f"/recommendations/{reco['id']}/answer",
-        json={"answer": "First answer"}
+        f"/recommendations/{reco['id']}/answer", json={"answer": "First answer"}
     )
     response = auth_client_jane.patch(
-        f"/recommendations/{reco['id']}/answer",
-        json={"answer": "Second answer"}
+        f"/recommendations/{reco['id']}/answer", json={"answer": "Second answer"}
     )
     assert response.status_code == 409
