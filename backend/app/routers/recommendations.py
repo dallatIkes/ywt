@@ -5,6 +5,7 @@ from app.schemas.recommendation import (
     RecoSentOut,
     RecoReceivedOut,
     RatingUpdate,
+    AnswerUpdate,
     RecoOut,
 )
 from app.services.recommendation_service import RecommendationService
@@ -47,3 +48,13 @@ def rate_reco(
     current_user: User = Depends(get_current_user),
 ):
     return service.rate_reco(reco_id, data, current_user)
+
+
+@router.patch("/{reco_id}/answer", response_model=RecoOut)
+def answer_reco(
+    reco_id: int,
+    data: AnswerUpdate,
+    service: RecommendationService = Depends(get_reco_service),
+    current_user: User = Depends(get_current_user)
+):
+    return service.answer_reco(reco_id, data, current_user)
