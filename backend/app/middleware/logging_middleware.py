@@ -9,7 +9,7 @@ from app.core.config import settings
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S"
+    datefmt="%Y-%m-%d %H:%M:%S",
 )
 
 logger = logging.getLogger("ywt")
@@ -27,11 +27,7 @@ def _extract_username(request: Request) -> str:
         return "anonymous"
     token = auth_header.split(" ")[1]
     try:
-        payload = jwt.decode(
-            token,
-            settings.JWT_SECRET_KEY,
-            algorithms=["HS256"]
-        )
+        payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
         return payload.get("sub", "anonymous")
     except JWTError:
         return "anonymous"
@@ -57,9 +53,7 @@ async def logging_middleware(request: Request, call_next) -> Response:
     query = f"?{request.url.query}" if request.url.query else ""
 
     # Log the incoming request
-    logger.info(
-        f"[{request_id}] → {method} {url}{query} | user={username}"
-    )
+    logger.info(f"[{request_id}] → {method} {url}{query} | user={username}")
 
     # Record start time — used to compute execution duration
     start = time.perf_counter()
@@ -76,7 +70,7 @@ async def logging_middleware(request: Request, call_next) -> Response:
         logger.log(
             level,
             f"[{request_id}] ← {response.status_code} | "
-            f"{method} {url} | user={username} | {duration_ms:.1f}ms"
+            f"{method} {url} | user={username} | {duration_ms:.1f}ms",
         )
 
         # Attach request ID to response headers for frontend tracing

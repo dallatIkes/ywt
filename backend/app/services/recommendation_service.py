@@ -5,6 +5,7 @@ from app.schemas.recommendation import RecoCreate, RatingUpdate
 from app.core.exceptions import ForbiddenError
 from app.db.models.user import User
 from app.db.models.recommendation import Recommendation
+from app.core.decorators import log_service_call
 
 # ── Strategy pattern ──────────────────────────────────────────────────────────
 
@@ -90,6 +91,7 @@ class RecommendationService:
         self.normalizer = normalizer or YouTubeNormalizer()
         self.observers = observers or [LogObserver()]
 
+    @log_service_call("send_recommendation")
     def send_reco(self, data: RecoCreate, sender: User) -> Recommendation:
         # Business rule: cannot recommend to yourself
         if data.to_user_id == sender.id:
@@ -119,6 +121,7 @@ class RecommendationService:
     def get_received(self, user: User) -> list[dict]:
         return self.reco_repo.get_received_by_user(user.id)
 
+    @log_service_call("rate_recommendation")
     def rate_reco(
         self, reco_id: int, data: RatingUpdate, current_user: User
     ) -> Recommendation:

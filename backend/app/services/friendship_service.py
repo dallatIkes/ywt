@@ -3,6 +3,7 @@ from app.repositories.user_repository import UserRepository
 from app.db.models.friendship import Friendship, FriendshipStatus
 from app.db.models.user import User
 from app.core.exceptions import ConflictError, ForbiddenError
+from app.core.decorators import log_service_call
 
 # ── State pattern ─────────────────────────────────────────────────────────────
 
@@ -28,6 +29,7 @@ class FriendshipService:
         self.friendship_repo = friendship_repo
         self.user_repo = user_repo
 
+    @log_service_call("send_friend_request")
     def send_request(self, requester: User, addressee_id: str) -> Friendship:
         # Business rule: cannot send a request to yourself
         if requester.id == addressee_id:
@@ -45,6 +47,7 @@ class FriendshipService:
             requester_id=requester.id, addressee_id=addressee_id
         )
 
+    @log_service_call("respond_to_friend_request")
     def respond_to_request(
         self, friendship_id: int, new_status: str, current_user: User
     ) -> Friendship:

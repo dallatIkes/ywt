@@ -3,12 +3,14 @@ from app.schemas.user import UserCreate, UserUpdate
 from app.core.security import hash_pwd
 from app.core.exceptions import ConflictError
 from app.db.models.user import User
+from app.core.decorators import log_service_call
 
 
 class UserService:
     def __init__(self, repo: UserRepository):
         self.repo = repo
 
+    @log_service_call()
     def create_user(self, data: UserCreate) -> User:
         if self.repo.get_by_username(data.username):
             raise ConflictError("Username already exists")
@@ -22,6 +24,7 @@ class UserService:
     def get_by_username(self, username: str) -> User:
         return self.repo.get_by_username_or_404(username)
 
+    @log_service_call()
     def update_user(self, username: str, data: UserUpdate) -> User:
         user = self.repo.get_by_username_or_404(username)
 
@@ -34,6 +37,7 @@ class UserService:
             user=user, username=data.username, hashed_password=hash_pwd(data.password)
         )
 
+    @log_service_call()
     def delete_user(self, username: str) -> None:
         user = self.repo.get_by_username_or_404(username)
         self.repo.delete(user)
