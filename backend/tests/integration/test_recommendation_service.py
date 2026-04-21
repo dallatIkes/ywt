@@ -2,8 +2,8 @@ import pytest
 from app.services.recommendation_service import RecommendationService
 from app.repositories.recommendation_repository import RecommendationRepository
 from app.repositories.user_repository import UserRepository
-from app.schemas.recommendation import RecoCreate, RatingUpdate
-from app.core.exceptions import ForbiddenError, NotFoundError
+from app.schemas.recommendation import RecoCreate, RatingUpdate, AnswerUpdate
+from app.core.exceptions import ForbiddenError, NotFoundError, ConflictError
 
 
 @pytest.fixture
@@ -97,3 +97,41 @@ def test_rate_reco_wrong_user_raises_forbidden(reco_service, user_john, user_jan
     reco = reco_service.send_reco(data, user_john)
     with pytest.raises(ForbiddenError):
         reco_service.rate_reco(reco.id, RatingUpdate(rating=5), user_john)
+
+
+def test_answer_reco(reco_service, user_john, user_jane):
+    data = RecoCreate(
+        link="https://youtu.be/dQw4w9WgXcQ",
+        description="Watch this",
+        to_user_id=user_jane.id
+    )
+    reco = reco_service.send_reco(data, user_john)
+    answered = reco_service.answer_reco(
+        reco.id,
+        AnswerUpdate(answer="Loved it!"),
+        user_jane
+    )
+    assert answered.answer == "Loved it!"
+
+
+def test_answer_reco_wrong_user_raises_forbidden(reco_service, user_john, user_jane):
+    data = RecoCreate(
+        link="https://youtu.be/dQw4w9WgXcQ",
+        description="Watch this",
+        to_user_id=user_jane.id
+    )
+    reco = reco_service.send_reco(data, user_john)
+    with pytest.raises(ForbiddenError):
+        reco_service.answer_reco(reco.id, AnswerUpdate(answer="Nice!"), user_john)
+
+
+def test_answer_reco_twice_raises_conflict(reco_service, user_john, user_jane):
+    data = RecoCreate(
+        link="https://youtu.be/dQw4w9WgXcQ",
+        description="Watch this",
+        to_user_id=user_jane.id
+    )
+    reco = reco_service.send_reco(data, user_john)
+    reco_service.answer_reco(reco.id, AnswerUpdate(answer="Loved it!"), user_jane)
+    with pytest.raises(ConflictError):
+        reco_service.answer_reco(reco.id, AnswerUpdate(answer="Again!"), user_jane)
