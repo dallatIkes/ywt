@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
 import BaseRecoCard from '../../src/components/cards/BaseRecoCard'
 
@@ -9,6 +9,7 @@ const baseReco = {
   from_user: 'johnDoe',
   to_user: 'janeDoe',
   rating: null,
+  anwer: null,
   created_at: '2024-06-15T10:30:00',
 }
 
@@ -51,5 +52,86 @@ describe('BaseRecoCard', () => {
       />,
     )
     expect(screen.getByTestId('custom-player')).toBeInTheDocument()
+  })
+
+  it('shows answer input on received reco with no answer', () => {
+    render(<BaseRecoCard reco={baseReco} direction="received" />)
+    expect(
+      screen.getByPlaceholderText('Reply to this recommendation...'),
+    ).toBeInTheDocument()
+  })
+
+  it('does not show answer input on sent reco', () => {
+    render(<BaseRecoCard reco={baseReco} direction="sent" />)
+    expect(
+      screen.queryByPlaceholderText('Reply to this recommendation...'),
+    ).not.toBeInTheDocument()
+  })
+
+  it('shows no reply yet on sent reco with no answer', () => {
+    render(<BaseRecoCard reco={baseReco} direction="sent" />)
+    expect(screen.getByText('No reply yet')).toBeInTheDocument()
+  })
+
+  it('calls onAnswer with correct args on button click', async () => {
+    const onAnswer = vi.fn().mockResolvedValue({})
+    render(
+      <BaseRecoCard reco={baseReco} direction="received" onAnswer={onAnswer} />,
+    )
+
+    fireEvent.change(
+      screen.getByPlaceholderText('Reply to this recommendation...'),
+      { target: { value: 'Loved it!' } },
+    )
+    fireEvent.click(screen.getByRole('button', { name: '↩' }))
+
+    await waitFor(() => expect(onAnswer).toHaveBeenCalledWith(1, 'Loved it!'))
+  })
+
+  it('calls onAnswer on Enter key press', async () => {
+    const onAnswer = vi.fn().mockResolvedValue({})
+    render(
+      <BaseRecoCard reco={baseReco} direction="received" onAnswer={onAnswer} />,
+    )
+
+    const input = screen.getByPlaceholderText('Reply to this recommendation...')
+    fireEvent.change(input, { target: { value: 'Great pick!' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+
+    await waitFor(() => expect(onAnswer).toHaveBeenCalledWith(1, 'Great pick!'))
+  })
+
+  it('disables submit button when input is empty', () => {
+    render(
+      <BaseRecoCard reco={baseReco} direction="received" onAnswer={vi.fn()} />,
+    )
+    expect(screen.getByRole('button', { name: '↩' })).toBeDisabled()
+  })
+
+  it('shows answer text on received reco with existing answer', () => {
+    const reco = { ...baseReco, answer: 'Loved it!' }
+    render(<BaseRecoCard reco={reco} direction="received" />)
+    expect(screen.getByText('Loved it!')).toBeInTheDocument()
+    expect(screen.getByText('Your reply')).toBeInTheDocument()
+  })
+
+  it('shows answer text on sent reco with existing answer', () => {
+    const reco = { ...baseReco, answer: 'Loved it!' }
+    render(<BaseRecoCard reco={reco} direction="sent" />)
+    expect(screen.getByText('Loved it!')).toBeInTheDocument()
+    expect(screen.getByText('Their reply')).toBeInTheDocument()
+  })
+
+  it('clears input after successful answer', async () => {
+    const onAnswer = vi.fn().mockResolvedValue({})
+    render(
+      <BaseRecoCard reco={baseReco} direction="received" onAnswer={onAnswer} />,
+    )
+
+    const input = screen.getByPlaceholderText('Reply to this recommendation...')
+    fireEvent.change(input, { target: { value: 'Nice!' } })
+    fireEvent.click(screen.getByRole('button', { name: '↩' }))
+
+    await waitFor(() => expect(input).toHaveValue(''))
   })
 })

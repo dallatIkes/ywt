@@ -10,15 +10,36 @@ function detectPlatform(link) {
   return 'unknown'
 }
 
-export default function RecoCardFactory({ reco, direction, onRate }) {
+export default function RecoCardFactory({ reco, direction, onRate, onAnswer }) {
   const platform = detectPlatform(reco.link)
 
   switch (platform) {
     case 'youtube':
-      return <YouTubeCard reco={reco} direction={direction} onRate={onRate} />
+      return (
+        <YouTubeCard
+          reco={reco}
+          direction={direction}
+          onRate={onRate}
+          onAnswer={onAnswer}
+        />
+      )
     case 'vimeo':
-      return <VimeoCard reco={reco} direction={direction} onRate={onRate} />
+      return (
+        <VimeoCard
+          reco={reco}
+          direction={direction}
+          onRate={onRate}
+          onAnswer={onAnswer}
+        />
+      )
     default:
-      return <BaseRecoCard reco={reco} direction={direction} onRate={onRate} />
+      return (
+        <BaseRecoCard
+          reco={reco}
+          direction={direction}
+          onRate={onRate}
+          onAnswer={onAnswer}
+        />
+      )
   }
 }

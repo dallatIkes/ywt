@@ -32,7 +32,7 @@ export default [
     languageOptions: {
       globals: {
         ...vitest.environments.env.globals,
-      }
+      },
     },
     rules: {
       ...js.configs.recommended.rules,

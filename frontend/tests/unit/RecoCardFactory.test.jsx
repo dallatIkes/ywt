@@ -63,4 +63,18 @@ describe('RecoCardFactory', () => {
     const filled = document.querySelectorAll('.star.filled')
     expect(filled.length).toBe(3)
   })
+
+  it('passes onAnswer to card component', () => {
+    const onAnswer = vi.fn()
+    const reco = {
+      ...baseReco,
+      link: 'https://youtube.com/embed/abc',
+      answer: null,
+    }
+    render(
+      <RecoCardFactory reco={reco} direction="received" onAnswer={onAnswer} />,
+    )
+    const input = screen.getByPlaceholderText('Reply to this recommendation...')
+    expect(input).toBeInTheDocument()
+  })
 })

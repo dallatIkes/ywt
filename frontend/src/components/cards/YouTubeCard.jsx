@@ -1,11 +1,12 @@
 import BaseRecoCard from './BaseRecoCard'
 
-export default function YouTubeCard({ reco, direction, onRate }) {
+export default function YouTubeCard({ reco, direction, onRate, onAnswer }) {
   return (
     <BaseRecoCard
       reco={reco}
       direction={direction}
       onRate={onRate}
+      onAnswer={onAnswer}
       player={
         <iframe
           src={reco.link}

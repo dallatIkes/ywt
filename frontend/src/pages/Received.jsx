@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getReceived } from '../api/recommendations'
-import { rateReco } from '../api/recommendations'
+import { getReceived, rateReco, answerReco } from '../api/recommendations'
 import RecoCardFactory from '../components/cards/RecoCardFactory'
 import './Page.css'
 
@@ -29,6 +28,19 @@ export default function Received() {
     }
   }
 
+  async function handleAnswer(recoId, answer) {
+    try {
+      const updated = await answerReco(recoId, answer)
+      setRecos((prev) =>
+        prev.map((r) =>
+          r.id === updated.id ? { ...r, answer: updated.answer } : r,
+        ),
+      )
+    } catch {
+      alert('Failed to send answer')
+    }
+  }
+
   if (loading) return <div className="page-state">Loading...</div>
   if (error) return <div className="page-state error">{error}</div>
 
@@ -45,6 +57,7 @@ export default function Received() {
               reco={reco}
               direction="received"
               onRate={handleRate}
+              onAnswer={handleAnswer}
             />
           ))}
         </div>

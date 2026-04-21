@@ -25,3 +25,10 @@ export async function rateReco(recoId, rating) {
   })
   return data
 }
+
+export async function answerReco(recoId, answer) {
+  const { data } = await client.patch(`/recommendations/${recoId}/answer`, {
+    answer,
+  })
+  return data
+}
