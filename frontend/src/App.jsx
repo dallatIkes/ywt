@@ -8,6 +8,7 @@ import Received from './pages/Received'
 import Sent from './pages/Sent'
 import Recommend from './pages/Recommend'
 import Friends from './pages/Friends'
+import ErrorBoundary from './components/ErrorBoundary'
 
 function ProtectedRoute({ children }) {
   const { currentUser, loading } = useAuth()
@@ -18,27 +19,29 @@ function ProtectedRoute({ children }) {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <ProtectedLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Navigate to="/received" replace />} />
-            <Route path="received" element={<Received />} />
-            <Route path="sent" element={<Sent />} />
-            <Route path="recommend" element={<Recommend />} />
-            <Route path="friends" element={<Friends />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <ProtectedLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate to="/received" replace />} />
+              <Route path="received" element={<Received />} />
+              <Route path="sent" element={<Sent />} />
+              <Route path="recommend" element={<Recommend />} />
+              <Route path="friends" element={<Friends />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </ErrorBoundary>
   )
 }
