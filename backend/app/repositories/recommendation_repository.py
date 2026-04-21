@@ -35,6 +35,7 @@ class RecommendationRepository(BaseRepository[Recommendation]):
                 "description": r.Recommendation.description,
                 "to_user": r.username,
                 "rating": r.Recommendation.rating,
+                "answer": r.Recommendation.answer,
                 "created_at": r.Recommendation.created_at,
             }
             for r in rows
@@ -54,6 +55,7 @@ class RecommendationRepository(BaseRepository[Recommendation]):
                 "description": r.Recommendation.description,
                 "from_user": r.username,
                 "rating": r.Recommendation.rating,
+                "answer": r.Recommendation.answer,
                 "created_at": r.Recommendation.created_at,
             }
             for r in rows
@@ -61,4 +63,8 @@ class RecommendationRepository(BaseRepository[Recommendation]):
 
     def update_rating(self, reco: Recommendation, rating: int) -> Recommendation:
         reco.rating = rating
+        return self.save(reco)
+
+    def update_answer(self, reco: Recommendation, answer: str) -> Recommendation:
+        reco.answer = answer
         return self.save(reco)
