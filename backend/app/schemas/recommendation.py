@@ -13,6 +13,11 @@ class RatingUpdate(BaseModel):
     rating: int = Field(ge=1, le=5)
 
 
+class AnswerUpdate(BaseModel):
+    # The recipient's reply to the recommendation
+    answer: str = Field(min_length=1, max_length=280)
+
+
 class RecoOut(BaseModel):
     id: int
     link: str
@@ -20,6 +25,7 @@ class RecoOut(BaseModel):
     from_user_id: str
     to_user_id: str
     rating: int | None
+    answer: str | None
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
@@ -31,6 +37,7 @@ class RecoSentOut(BaseModel):
     description: str
     to_user: str
     rating: int | None
+    answer: str | None
     created_at: datetime
 
 
@@ -41,4 +48,5 @@ class RecoReceivedOut(BaseModel):
     description: str
     from_user: str
     rating: int | None
+    answer: str | None
     created_at: datetime

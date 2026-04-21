@@ -19,6 +19,8 @@ class Recommendation(Base):
     to_user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), nullable=False)
     # Nullable until the recipient rates the recommendation (1-5)
     rating: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    # Nullable until the recipient replies to the recommendation
+    answer: Mapped[str | None] = mapped_column(String(280), nullable=True)
     created_at: Mapped[datetime.datetime] = mapped_column(
         server_default=func.now(), nullable=False
     )
