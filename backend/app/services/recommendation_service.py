@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from app.repositories.recommendation_repository import RecommendationRepository
 from app.repositories.user_repository import UserRepository
-from app.schemas.recommendation import RecoCreate, RatingUpdate
-from app.core.exceptions import ForbiddenError
+from app.schemas.recommendation import RecoCreate, RatingUpdate, AnswerUpdate
+from app.core.exceptions import ForbiddenError, ConflictError
 from app.db.models.user import User
 from app.db.models.recommendation import Recommendation
 from app.core.decorators import log_service_call
@@ -132,3 +132,22 @@ class RecommendationService:
             raise ForbiddenError("Only the recipient can rate a recommendation")
 
         return self.reco_repo.update_rating(reco, data.rating)
+
+    @log_service_call("answer_recommendation")
+    def answer_reco(
+        self,
+        reco_id: int,
+        data: AnswerUpdate,
+        current_user: User
+    ) -> Recommendation:
+        reco = self.reco_repo.get_or_404(reco_id)
+
+        # Business rule: only the recipient can answer
+        if reco.to_user_id != current_user.id:
+            raise ForbiddenError("Only the recipient can answer a recommendation")
+
+        # Business rule: cannot answer twice
+        if reco.answer is not None:
+            raise ConflictError("This recommendation already has an answer")
+
+        return self.reco_repo.update_answer(reco, data.answer)
