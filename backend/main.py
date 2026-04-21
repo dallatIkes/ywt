@@ -7,10 +7,13 @@ from app.core.exceptions import (
     ForbiddenError,
     UnauthorizedError,
 )
-from app.routers import auth, users, recommendations, friendships
 from fastapi.middleware.cors import CORSMiddleware
+from app.middleware.logging_middleware import logging_middleware
+from app.routers import auth, users, recommendations, friendships
 
 app = FastAPI(title="Yo Watch This!", version="1.0.0")
+
+app.middleware("http")(logging_middleware)
 
 app.add_middleware(
     CORSMiddleware,
