@@ -27,7 +27,7 @@ export default function Sent() {
         </p>
       ) : (
         <div className="card-grid">
-          {recos.map((reco) => (
+          {[...recos].reverse().map((reco) => (
             <RecoCardFactory key={reco.id} reco={reco} direction="sent" />
           ))}
         </div>
