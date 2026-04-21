@@ -77,6 +77,35 @@ class DailymotionStrategy {
     }
 }
 
+class SpotifyStrategy {
+    platform = 'spotify'
+
+    matches(url) {
+        try {
+            return new URL(url).hostname.includes('spotify.com')
+        } catch {
+            return false
+        }
+    }
+
+    buildEmbedUrl(url) {
+        try {
+            const parsed = new URL(url)
+            const pathParts = parsed.pathname.split('/').filter(Boolean)
+
+            // ex: /track/{id}
+            if (pathParts.length < 2) return null
+
+            const type = pathParts[0]   // track, album, playlist, etc.
+            const id = pathParts[1]
+
+            return `https://open.spotify.com/embed/${type}/${id}?utm_source=generator&theme=0`
+        } catch {
+            return null
+        }
+    }
+}
+
 class FallbackStrategy {
     platform = 'other'
 
@@ -98,6 +127,7 @@ const STRATEGIES = {
     youtube: new YouTubeStrategy(),
     vimeo: new VimeoStrategy(),
     dailymotion: new DailymotionStrategy(),
+    spotify: new SpotifyStrategy(),
     other: new FallbackStrategy(),
 }
 

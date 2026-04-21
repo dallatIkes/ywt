@@ -109,6 +109,27 @@ class DailymotionNormalizer(VideoLinkNormalizer):
             return url
 
 
+class SpotifyNormalizer(VideoLinkNormalizer):
+    """Handles open.spotify.com URLs."""
+
+    def matches(self, url: str) -> bool:
+        try:
+            return "open.spotify.com" in (urlparse(url).hostname or "")
+        except Exception:
+            return False
+
+    def normalize(self, url: str) -> str:
+        try:
+            parsed = urlparse(url)
+            path_parts = parsed.path.strip("/").split("/")
+            if len(path_parts) < 2:
+                return url
+            media_type, media_id = path_parts[0], path_parts[1]
+            return f"https://open.spotify.com/embed/{media_type}/{media_id}?utm_source=generator&theme=0"
+        except Exception:
+            return url
+
+
 class PassthroughNormalizer(VideoLinkNormalizer):
     """Fallback — returns the URL as-is for unsupported platforms."""
 
@@ -128,6 +149,7 @@ NORMALIZERS: dict[str, VideoLinkNormalizer] = {
     "youtube": YouTubeNormalizer(),
     "vimeo": VimeoNormalizer(),
     "dailymotion": DailymotionNormalizer(),
+    "spotify": SpotifyNormalizer(),
     "passthrough": PassthroughNormalizer(),
 }
 

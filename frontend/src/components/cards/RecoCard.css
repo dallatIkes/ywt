@@ -120,7 +120,7 @@
 
 /* Fill all stars from hovered one to the left */
 .reco-rating-inner .star:hover,
-.reco-rating-inner .star:hover ~ .star {
+.reco-rating-inner .star:hover~.star {
   color: #f5a623;
   transform: scale(1.15);
 }
