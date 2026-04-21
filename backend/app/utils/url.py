@@ -79,21 +79,32 @@ class VimeoNormalizer(VideoLinkNormalizer):
 
 
 class DailymotionNormalizer(VideoLinkNormalizer):
-    """Handles dailymotion.com URLs."""
+    """Handles dailymotion.com and dai.ly (short) URLs."""
 
     def matches(self, url: str) -> bool:
         try:
-            return "dailymotion.com" in (urlparse(url).hostname or "")
+            hostname = urlparse(url).hostname or ""
+            return "dailymotion.com" in hostname or "dai.ly" in hostname
         except Exception:
             return False
 
     def normalize(self, url: str) -> str:
         try:
-            # dailymotion.com/video/x9abc12
-            video_id = urlparse(url).path.split("/")[-1]
+            parsed = urlparse(url)
+            hostname = parsed.hostname or ""
+            video_id = None
+
+            if "dailymotion.com" in hostname:
+                # ex: dailymotion.com/video/xa5zx1e
+                video_id = parsed.path.split("/")[-1]
+            elif "dai.ly" in hostname:
+                # ex: dai.ly/xa5zx1e
+                video_id = parsed.path.replace("/", "")
+
             if not video_id:
                 return url
-            return f"https://www.dailymotion.com/embed/video/{video_id}"
+
+            return f"https://www.dailymotion.com/embed/video/{video_id}?autostart=0&mute=0&controls=1"
         except Exception:
             return url
 

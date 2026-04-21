@@ -47,16 +47,33 @@ class DailymotionStrategy {
 
     matches(url) {
         try {
-            return new URL(url).hostname.includes('dailymotion.com')
-        } catch { return false }
+            const hostname = new URL(url).hostname
+            return hostname.includes('dailymotion.com') || hostname.includes('dai.ly')
+        } catch {
+            return false
+        }
     }
 
     buildEmbedUrl(url) {
         try {
-            // dailymotion.com/video/x9abc12
-            const videoId = new URL(url).pathname.split('/').pop()
-            return videoId ? `https://www.dailymotion.com/embed/video/${videoId}` : null
-        } catch { return null }
+            const parsed = new URL(url)
+            let videoId = null
+
+            if (parsed.hostname.includes('dailymotion.com')) {
+                // ex: /video/xa5zx1e
+                videoId = parsed.pathname.split('/').pop()
+            } else if (parsed.hostname.includes('dai.ly')) {
+                // ex: /xa5zx1e
+                videoId = parsed.pathname.replace('/', '')
+            }
+
+            return videoId
+                ? `https://www.dailymotion.com/embed/video/${videoId}?autostart=0&mute=0&controls=1`
+                : null
+
+        } catch {
+            return null
+        }
     }
 }
 

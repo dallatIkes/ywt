@@ -25,7 +25,7 @@ function Preview({ url }) {
         src={embedUrl}
         title="Video preview"
         frameBorder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
         allowFullScreen
       />
     )
