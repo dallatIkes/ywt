@@ -69,7 +69,7 @@ def test_dailymotion_normalize():
     n = DailymotionNormalizer()
     assert (
         n.normalize("https://www.dailymotion.com/video/x9abc12")
-        == "https://www.dailymotion.com/embed/video/x9abc12"
+        == "https://www.dailymotion.com/embed/video/x9abc12?autostart=0&mute=0&controls=1"
     )
 
 
