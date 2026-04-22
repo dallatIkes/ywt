@@ -168,6 +168,36 @@
   background: var(--blue-dark);
 }
 
+.preview-embed--soundcloud {
+  height: 166px;
+  background: #0a0a0a;
+  box-shadow:
+    inset 0 -10px 0 0 #0a0a0a,
+    inset 10px 0 0 0 #0a0a0a,
+    inset -10px 0 0 0 #0a0a0a,
+    inset 0 10px 0 0 #0a0a0a;
+}
+
+.recommend-preview:has(.preview-embed--soundcloud) {
+  aspect-ratio: unset;
+  height: 166px;
+}
+
+.preview-embed--soundcloud {
+  height: 166px;
+  background: #0a0a0a;
+  box-shadow:
+    inset 0 -10px 0 0 #0a0a0a,
+    inset 10px 0 0 0 #0a0a0a,
+    inset -10px 0 0 0 #0a0a0a,
+    inset 0 10px 0 0 #0a0a0a;
+}
+
+.recommend-preview:has(.preview-embed--soundcloud) {
+  aspect-ratio: unset;
+  height: 166px;
+}
+
 @media (max-width: 768px) {
   .recommend-layout {
     grid-template-columns: 1fr;

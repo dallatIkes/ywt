@@ -4,6 +4,7 @@ import VimeoCard from './VimeoCard'
 import BaseRecoCard from './BaseRecoCard'
 import DailymotionCard from './DailymotionCard'
 import SpotifyCard from './SpotifyCard'
+import SoundCloudCard from './SoundCloud'
 
 // Map platform name to card component
 const CARD_COMPONENTS = {
@@ -11,6 +12,7 @@ const CARD_COMPONENTS = {
   vimeo: VimeoCard,
   dailymotion: DailymotionCard,
   spotify: SpotifyCard,
+  soundcloud: SoundCloudCard,
 }
 
 export default function RecoCardFactory({ reco, direction, onRate, onAnswer }) {

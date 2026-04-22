@@ -130,6 +130,30 @@ class SpotifyNormalizer(VideoLinkNormalizer):
             return url
 
 
+class SoundCloudNormalizer(VideoLinkNormalizer):
+    """Handles soundcloud.com URLs."""
+
+    def matches(self, url: str) -> bool:
+        try:
+            return "soundcloud.com" in (urlparse(url).hostname or "")
+        except Exception:
+            return False
+
+    def normalize(self, url: str) -> str:
+        try:
+            from urllib.parse import quote
+
+            encoded = quote(url, safe="")
+            return (
+                f"https://w.soundcloud.com/player/?url={encoded}"
+                f"&color=%23ff5500&auto_play=false&hide_related=false"
+                f"&show_comments=true&show_user=true&show_reposts=false"
+                f"&show_teaser=true&visual=true"
+            )
+        except Exception:
+            return url
+
+
 class PassthroughNormalizer(VideoLinkNormalizer):
     """Fallback — returns the URL as-is for unsupported platforms."""
 
@@ -150,6 +174,7 @@ NORMALIZERS: dict[str, VideoLinkNormalizer] = {
     "vimeo": VimeoNormalizer(),
     "dailymotion": DailymotionNormalizer(),
     "spotify": SpotifyNormalizer(),
+    "soundcloud": SoundCloudNormalizer(),
     "passthrough": PassthroughNormalizer(),
 }
 

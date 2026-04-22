@@ -114,6 +114,27 @@ class SpotifyStrategy {
   }
 }
 
+class SoundCloudStrategy {
+  platform = 'soundcloud'
+
+  matches(url) {
+    try {
+      return new URL(url).hostname.includes('soundcloud.com')
+    } catch {
+      return false
+    }
+  }
+
+  buildEmbedUrl(url) {
+    try {
+      const encoded = encodeURIComponent(url)
+      return `https://w.soundcloud.com/player/?url=${encoded}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`
+    } catch {
+      return null
+    }
+  }
+}
+
 class FallbackStrategy {
   platform = 'other'
 
@@ -141,6 +162,7 @@ const STRATEGIES = {
   vimeo: new VimeoStrategy(),
   dailymotion: new DailymotionStrategy(),
   spotify: new SpotifyStrategy(),
+  soundcloud: new SoundCloudStrategy(),
   other: new FallbackStrategy(),
 }
 
