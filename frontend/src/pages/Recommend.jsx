@@ -55,7 +55,9 @@ export default function Recommend() {
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    getFriends().then(setFriends).catch(() => { })
+    getFriends()
+      .then(setFriends)
+      .catch(() => {})
   }, [])
 
   async function handleSubmit(e) {
@@ -94,7 +96,9 @@ export default function Recommend() {
                 >
                   <option value="">Select a friend...</option>
                   {friends.map((f) => (
-                    <option key={f.id} value={f.id}>{f.username}</option>
+                    <option key={f.id} value={f.id}>
+                      {f.username}
+                    </option>
                   ))}
                 </select>
               ) : (

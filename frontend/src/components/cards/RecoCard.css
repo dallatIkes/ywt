@@ -120,7 +120,7 @@
 
 /* Fill all stars from hovered one to the left */
 .reco-rating-inner .star:hover,
-.reco-rating-inner .star:hover~.star {
+.reco-rating-inner .star:hover ~ .star {
   color: #f5a623;
   transform: scale(1.15);
 }
@@ -258,7 +258,10 @@
   overflow: hidden;
   flex-shrink: 0;
   position: relative;
-  box-shadow: inset 0 -8px 0 0 white, inset 8px 0 0 0 white, inset -8px 0 0 0 white;
+  box-shadow:
+    inset 0 -8px 0 0 white,
+    inset 8px 0 0 0 white,
+    inset -8px 0 0 0 white;
 }
 
 .reco-card--spotify .reco-player iframe {

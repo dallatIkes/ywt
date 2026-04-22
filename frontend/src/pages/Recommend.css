@@ -40,7 +40,9 @@
   font-size: 0.95rem;
   font-family: inherit;
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
   resize: vertical;
   background: white;
 }

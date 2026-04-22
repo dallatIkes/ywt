@@ -16,5 +16,12 @@ const CARD_COMPONENTS = {
 export default function RecoCardFactory({ reco, direction, onRate, onAnswer }) {
   const strategy = getMediaStrategy(reco.link)
   const CardComponent = CARD_COMPONENTS[strategy.platform] ?? BaseRecoCard
-  return <CardComponent reco={reco} direction={direction} onRate={onRate} onAnswer={onAnswer} />
+  return (
+    <CardComponent
+      reco={reco}
+      direction={direction}
+      onRate={onRate}
+      onAnswer={onAnswer}
+    />
+  )
 }
