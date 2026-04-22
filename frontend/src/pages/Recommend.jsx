@@ -21,13 +21,15 @@ function Preview({ url }) {
 
   if (embedUrl) {
     return (
-      <iframe
-        src={embedUrl}
-        title="Video preview"
-        frameBorder="0"
-        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-        allowFullScreen
-      />
+      <div className={`preview-embed preview-embed--${strategy.platform}`}>
+        <iframe
+          src={embedUrl}
+          title="Video preview"
+          frameBorder="0"
+          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          allowFullScreen
+        />
+      </div>
     )
   }
 

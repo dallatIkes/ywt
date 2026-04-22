@@ -125,7 +125,7 @@ class SpotifyNormalizer(VideoLinkNormalizer):
             if len(path_parts) < 2:
                 return url
             media_type, media_id = path_parts[0], path_parts[1]
-            return f"https://open.spotify.com/embed/{media_type}/{media_id}?utm_source=generator&theme=0"
+            return f"https://open.spotify.com/embed/{media_type}/{media_id}?utm_source=generator"
         except Exception:
             return url
 

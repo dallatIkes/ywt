@@ -99,7 +99,7 @@ class SpotifyStrategy {
             const type = pathParts[0]   // track, album, playlist, etc.
             const id = pathParts[1]
 
-            return `https://open.spotify.com/embed/${type}/${id}?utm_source=generator&theme=0`
+            return `https://open.spotify.com/embed/${type}/${id}?utm_source=generator`
         } catch {
             return null
         }

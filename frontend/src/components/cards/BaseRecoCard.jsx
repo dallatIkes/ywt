@@ -7,6 +7,7 @@ export default function BaseRecoCard({
   onRate,
   onAnswer,
   player,
+  variant,
 }) {
   const isReceived = direction === 'received'
   const [answerInput, setAnswerInput] = useState('')
@@ -24,7 +25,7 @@ export default function BaseRecoCard({
   }
 
   return (
-    <div className="reco-card">
+    <div className={`reco-card ${variant ? `reco-card--${variant}` : ''}`}>
       <div className="reco-player">
         {player ?? (
           <a

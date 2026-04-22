@@ -241,3 +241,57 @@
   color: var(--text-muted);
   font-style: italic;
 }
+
+/* ── Spotify variant ─────────────────────────────────────────────────────────*/
+
+.reco-card--spotify {
+  height: auto;
+  /* override fixed 220px — spotify player has own height */
+  flex-direction: column;
+}
+
+.reco-card--spotify .reco-player {
+  width: 100%;
+  height: 152px;
+  background: #000;
+  border-radius: 0;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+  box-shadow: inset 0 -8px 0 0 white, inset 8px 0 0 0 white, inset -8px 0 0 0 white;
+}
+
+.reco-card--spotify .reco-player iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  border-radius: 0;
+  margin: 0;
+}
+
+/* Cover bottom corners of the Spotify iframe with white squares */
+.reco-card--spotify .reco-player::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background: white;
+  pointer-events: none;
+}
+
+/* For playlists and albums — taller player */
+.reco-card--spotify.reco-card--tall .reco-player {
+  height: 352px;
+}
+
+@media (max-width: 768px) {
+  .reco-card--spotify .reco-player {
+    height: 152px;
+    padding-bottom: 0;
+    /* override 16:9 padding from mobile base style */
+    position: relative;
+  }
+}
