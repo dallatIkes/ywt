@@ -49,6 +49,12 @@ def handle_unauthorized(request: Request, exc: UnauthorizedError):
 
 # ── Routers ───────────────────────────────────────────────────────────────────
 
+
+@app.get("/health")
+def health():
+    return {"status": "ok"}
+
+
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(recommendations.router)
