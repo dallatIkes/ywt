@@ -1,121 +1,75 @@
-# YWT (Yo Watch This!)
+# Yo Watch This!
 
-A simple web app to share cool videos with your friends.
+A full-stack video recommendation app — share YouTube, Vimeo, Spotify, SoundCloud and Dailymotion links with friends, rate what you watch, and reply to recommendations.
 
-This project uses:
-- **FastAPI** for the backend
-- **SvelteKit** for the frontend
-- A **Makefile** to manage development commands easily
+## Stack
 
----
+| | Tech |
+|---|---|
+| **Frontend** | React 18, Vite, React Router, Axios, PWA |
+| **Backend** | FastAPI, SQLAlchemy, PostgreSQL (Supabase) |
+| **Auth** | JWT (python-jose), bcrypt |
+| **Tests** | pytest (backend), Vitest + Testing Library (frontend) |
+| **Deploy** | Vercel (frontend) · Render (backend) · Supabase (database) |
 
-## Prerequisites
+## Structure
 
-- Python 3.10+
-- Node.js & npm
-- make
-- A Unix-like environment (Linux / macOS)
-
----
-
-## Project structure
-
-- backend: FastAPI app (entrypoint: main:app)
-- frontend: SvelteKit app
-- test.db: SQLite database (created at runtime)
-- Makefile: development commands
-
----
-
-## How to run the project
-
-### 1. Create a Python virtual environment
-
-```bash
-python -m venv .venv
+```
+ywt/
+├── frontend/        # React + Vite SPA
+└── backend/         # FastAPI REST API
+    ├── app/
+    │   ├── core/        # config, security, exceptions
+    │   ├── db/          # SQLAlchemy models + session
+    │   ├── schemas/     # Pydantic schemas
+    │   ├── repositories/
+    │   ├── services/
+    │   └── routers/
+    ├── tests/
+    └── scripts/
 ```
 
-Activate it:
+## Backend
 
 ```bash
-source .venv/bin/activate
+make install     # install dependencies
+make run         # start dev server
+make test        # run test suite
+make lint        # flake8
+make db-seed     # seed database with test data
 ```
 
-Install backend dependencies:
+## Frontend
 
 ```bash
-pip install -r requirements.txt
+npm install          # install dependencies
+npm run dev          # start dev server
+npm run test:run     # run test suite (single pass)
+npm run test         # run test suite (watch mode)
+npm run build        # production build
 ```
 
----
+## Local setup
 
-### 2. Run backend only
+1. Clone the repo and create a `.env` in `backend/` :
+
+```env
+DATABASE_URL=sqlite:///./dev.db
+JWT_SECRET_KEY=your-secret-key
+```
+
+2. Create a `.env` in `frontend/` :
+
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+3. Start both servers :
 
 ```bash
-make back
+# terminal 1
+cd backend && make run
+
+# terminal 2
+cd frontend && npm run dev
 ```
-
-- Backend URL: http://localhost:8000
-- API docs: http://localhost:8000/docs
-
----
-
-### 3. Run frontend only
-
-```bash
-make front
-```
-
-- Frontend URL: http://localhost:5173
-
----
-
-### 4. Run full development environment (recommended)
-
-This starts **backend and frontend together**:
-
-```bash
-make dev
-```
-
-Press **Ctrl+C** to stop everything.
-
----
-
-## Database commands
-
-Clean the database:
-
-```bash
-make db-clean
-```
-
-Seed the database with test data:
-
-```bash
-make db-seed
-```
-
----
-
-## Other useful commands
-
-Update requirements.txt from the virtual environment:
-
-```bash
-make freeze
-```
-
-Display all available commands:
-
-```bash
-make help
-```
-
----
-
-## Notes
-
-- Authentication uses OAuth2 with JWT tokens.
-- The frontend communicates with the backend via HTTP API.
-- This project is intended for development usage.
